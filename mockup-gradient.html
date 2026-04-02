@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>aust — bevegelse · kunnskap · fellesskap</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream: #F7F3EC;
+      --sand: #EDE5D8;
+      --warm-white: #FDFAF6;
+      --forest: #2E3D28;
+      --forest-mid: #4A5E40;
+      --sage: #7A8E6C;
+      --sage-light: #B2C4A2;
+      --brown-dark: #3A2A1E;
+      --brown-mid: #7A5C48;
+      --brown-light: #C4A882;
+      --warm-grey: #8A827A;
+      --text-dark: #261E16;
+      --text-mid: #5C5048;
+      --text-light: #9A8E84;
+      --border: #DDD4C4;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--warm-white);
+      color: var(--text-dark);
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* ─── MOCKUP LABEL ─── */
+    .mockup-label {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--brown-dark);
+      color: rgba(255,255,255,0.6);
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 6px 12px;
+      border-radius: 2px;
+      z-index: 9999;
+      pointer-events: none;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 48px;
+      transition: background 0.4s, padding 0.4s, border-bottom 0.4s;
+    }
+    nav.scrolled {
+      background: rgba(253, 250, 246, 0.96);
+      backdrop-filter: blur(8px);
+      padding: 18px 48px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: 22px;
+      letter-spacing: 0.35em;
+      color: var(--cream);
+      text-decoration: none;
+      transition: color 0.4s;
+    }
+    nav.scrolled .nav-logo { color: var(--text-dark); }
+
+    .nav-links {
+      display: flex;
+      gap: 40px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(247,243,236,0.8);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    nav.scrolled .nav-links a { color: var(--text-mid); }
+    .nav-links a:hover { color: var(--sage); }
+
+    /* ─── HERO ─── */
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 600px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: linear-gradient(
+        170deg,
+        #1E2D1A 0%,
+        #2E3D28 25%,
+        #4A5E3A 45%,
+        #7A8A60 60%,
+        #B8A882 75%,
+        #E8DCC8 88%,
+        #F0E8D8 100%
+      );
+    }
+
+    /* Grain overlay */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.04;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Light vignette at edges */
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.3) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .hero-wordmark {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(80px, 16vw, 200px);
+      letter-spacing: 0.25em;
+      color: var(--cream);
+      line-height: 1;
+      text-indent: 0.25em; /* compensate for letter-spacing on last letter */
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s forwards;
+    }
+
+    .hero-tagline {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      font-size: 12px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(247,243,236,0.7);
+      opacity: 0;
+      animation: fadeUp 1.2s ease 0.9s forwards;
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      animation: fadeIn 1s ease 1.6s forwards;
+    }
+    .hero-scroll span {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(247,243,236,0.5);
+    }
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, rgba(247,243,236,0.5), transparent);
+      animation: scrollLine 2s ease-in-out 2s infinite;
+    }
+
+    /* ─── SECTION SHARED ─── */
+    section { padding: 120px 48px; }
+
+    .section-label {
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .section-label::after {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 1px;
+      background: var(--sage);
+    }
+
+    /* ─── OM AUST ─── */
+    .about {
+      background: var(--warm-white);
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 120px 48px;
+    }
+
+    .about-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .about-text h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(40px, 5vw, 64px);
+      line-height: 1.15;
+      color: var(--text-dark);
+      margin-bottom: 32px;
+      letter-spacing: -0.01em;
+    }
+
+    .about-text p {
+      font-size: 16px;
+      line-height: 1.8;
+      color: var(--text-mid);
+      margin-bottom: 20px;
+      font-weight: 300;
+    }
+
+    .about-text .navn-note {
+      margin-top: 32px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      font-size: 14px;
+      color: var(--text-light);
+      font-style: italic;
+    }
+
+    .about-image {
+      position: relative;
+      aspect-ratio: 3/4;
+      background: linear-gradient(145deg, #4A5E40 0%, #7A8E6C 40%, #B8A882 80%, #E8DCC8 100%);
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      padding: 24px;
+    }
+    .about-image .placeholder-label {
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(247,243,236,0.6);
+    }
+
+    /* ─── VISJON ─── */
+    .visjon {
+      background: var(--forest);
+      padding: 100px 48px;
+      text-align: center;
+    }
+    .visjon blockquote {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(22px, 3vw, 36px);
+      line-height: 1.6;
+      color: var(--cream);
+      max-width: 800px;
+      margin: 0 auto;
+      font-style: italic;
+      letter-spacing: 0.01em;
+    }
+    .visjon cite {
+      display: block;
+      margin-top: 32px;
+      font-family: 'DM Sans', sans-serif;
+      font-style: normal;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--sage-light);
+    }
+
+    /* ─── EVENTS ─── */
+    .events-section {
+      background: var(--cream);
+      padding: 120px 48px;
+    }
+    .events-header {
+      max-width: 1200px;
+      margin: 0 auto 64px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+    .events-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(36px, 5vw, 60px);
+      color: var(--text-dark);
+      letter-spacing: -0.01em;
+    }
+
+    .events-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+
+    .event-card {
+      display: flex;
+      flex-direction: column;
+      background: var(--warm-white);
+      border-radius: 4px;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+    .event-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 24px 48px rgba(42, 32, 24, 0.12);
+    }
+
+    .event-image {
+      aspect-ratio: 4/3;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-start;
+      padding: 20px;
+    }
+    .event-card:nth-child(1) .event-image {
+      background: linear-gradient(135deg, #3A2A1E 0%, #7A5C48 50%, #C4A882 100%);
+    }
+    .event-card:nth-child(2) .event-image {
+      background: linear-gradient(150deg, #1E2D28 0%, #3A5A4E 40%, #8AB0A0 75%, #D8E8E0 100%);
+    }
+    .event-card:nth-child(3) .event-image {
+      background: linear-gradient(140deg, #2E3D28 0%, #4A6040 40%, #8A9E7A 70%, #D8E4C8 100%);
+    }
+
+    .event-badge {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(247,243,236,0.8);
+      background: rgba(0,0,0,0.25);
+      padding: 5px 10px;
+      border-radius: 2px;
+      backdrop-filter: blur(4px);
+    }
+
+    .event-image .placeholder-label {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(247,243,236,0.4);
+    }
+
+    .event-body {
+      padding: 28px 28px 32px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .event-date {
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 12px;
+    }
+    .event-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-size: 26px;
+      color: var(--text-dark);
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    .event-location {
+      font-size: 12px;
+      color: var(--text-light);
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+    }
+    .event-desc {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text-mid);
+      flex: 1;
+    }
+    .event-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+    .event-price {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--text-dark);
+    }
+    .event-price small {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 12px;
+      color: var(--text-light);
+      margin-left: 4px;
+    }
+    .btn-link {
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--sage);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: gap 0.2s;
+    }
+    .btn-link:hover { gap: 14px; }
+    .btn-link::after { content: '→'; }
+
+    /* ─── TEAM ─── */
+    .team-section {
+      background: var(--sand);
+      padding: 120px 48px;
+    }
+    .team-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .team-inner h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(36px, 5vw, 60px);
+      color: var(--text-dark);
+      margin-bottom: 64px;
+      letter-spacing: -0.01em;
+    }
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 48px;
+    }
+    .team-card {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 28px;
+      align-items: start;
+    }
+    .team-photo {
+      width: 140px;
+      height: 175px;
+      background: linear-gradient(150deg, #8A9E7A 0%, #C4A882 60%, #E8DCC8 100%);
+      border-radius: 4px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      padding: 10px;
+    }
+    .team-photo .placeholder-label {
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      color: rgba(247,243,236,0.5);
+      text-transform: uppercase;
+    }
+    .team-info h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-size: 24px;
+      color: var(--text-dark);
+      margin-bottom: 6px;
+    }
+    .team-info .team-role {
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 14px;
+    }
+    .team-info p {
+      font-size: 14px;
+      line-height: 1.75;
+      color: var(--text-mid);
+    }
+
+    /* ─── KONTAKT ─── */
+    .kontakt {
+      background: var(--brown-dark);
+      padding: 100px 48px;
+    }
+    .kontakt-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .kontakt-left .logo-footer {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(60px, 10vw, 120px);
+      letter-spacing: 0.25em;
+      color: rgba(247,243,236,0.08);
+      line-height: 1;
+      margin-bottom: 40px;
+    }
+    .kontakt-left p {
+      font-size: 15px;
+      line-height: 1.75;
+      color: rgba(247,243,236,0.55);
+      max-width: 380px;
+    }
+    .kontakt-right h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: 36px;
+      color: var(--cream);
+      margin-bottom: 40px;
+    }
+    .kontakt-detail {
+      margin-bottom: 24px;
+    }
+    .kontakt-detail label {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--sage-light);
+      margin-bottom: 6px;
+    }
+    .kontakt-detail a {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 300;
+      color: var(--cream);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: color 0.2s;
+    }
+    .kontakt-detail a:hover { color: var(--sage-light); }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 64px auto 0;
+      padding-top: 32px;
+      border-top: 1px solid rgba(247,243,236,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-bottom span {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: rgba(247,243,236,0.25);
+    }
+
+    /* ─── DIVIDER ─── */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+    @keyframes scrollLine {
+      0%, 100% { transform: scaleY(0); transform-origin: top; }
+      50% { transform: scaleY(1); transform-origin: top; }
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── RESPONSIVE (basic) ─── */
+    @media (max-width: 768px) {
+      nav { padding: 20px 24px; }
+      section { padding: 80px 24px; }
+      .about-inner { grid-template-columns: 1fr; }
+      .events-grid { grid-template-columns: 1fr; }
+      .team-grid { grid-template-columns: 1fr; }
+      .kontakt-inner { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="mockup-label">Mockup — Rammeverket for aust</div>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="#" class="nav-logo">aust</a>
+    <ul class="nav-links">
+      <li><a href="#om">Om aust</a></li>
+      <li><a href="#events">Events</a></li>
+      <li><a href="#kontakt">Kontakt</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-wordmark">aust</div>
+      <p class="hero-tagline">bevegelse &nbsp;·&nbsp; kunnskap &nbsp;·&nbsp; fellesskap</p>
+    </div>
+    <div class="hero-scroll">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- OM AUST -->
+  <div id="om" class="about">
+    <div class="about-inner">
+      <div class="about-text fade-in">
+        <div class="section-label">Om aust</div>
+        <h2>Forebyggende helse — en ny begynnelse</h2>
+        <p>
+          Aust er et nyetablert konsept innen forebyggende helsearbeid. Gjennom retreats,
+          arrangementer og samarbeid utvikler aust arenaer som kombinerer bevegelse,
+          kunnskapsformidling og fellesskap.
+        </p>
+        <p>
+          Målet er å gjøre kunnskap om kroppen mer tilgjengelig og samtidig skape trygge
+          rammer for læring, bevegelse og sosial tilhørighet.
+        </p>
+        <p class="navn-note">
+          Navnet «aust» refererer til Austevoll, til retning og ny begynnelse — og til østlige
+          tradisjoner der yoga har sitt historiske opphav. Lokal forankring møter global kunnskapstradisjon.
+        </p>
+      </div>
+      <div class="about-image fade-in">
+        <span class="placeholder-label">Bilde</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- VISJON -->
+  <section class="visjon">
+    <blockquote class="fade-in">
+      «Å etablere bærekraftige og tilgjengelige møteplasser for helsefremmende arbeid —
+      med særlig vekt på å styrke helhetlig helse, mestring og tilhørighet.»
+      <cite>Visjon, aust</cite>
+    </blockquote>
+  </section>
+
+  <!-- EVENTS -->
+  <section class="events-section" id="events">
+    <div class="events-header fade-in">
+      <div>
+        <div class="section-label">Kommende</div>
+        <h2>Events</h2>
+      </div>
+    </div>
+
+    <div class="events-grid">
+
+      <!-- Workshop -->
+      <div class="event-card fade-in">
+        <div class="event-image">
+          <span class="event-badge">Workshop</span>
+          <span class="placeholder-label">Bilde</span>
+        </div>
+        <div class="event-body">
+          <div class="event-date">August 2025</div>
+          <h3 class="event-title">Workshop — Endometriose & adenomyose</h3>
+          <div class="event-location">Litteraturhuset, Bergen</div>
+          <p class="event-desc">
+            En faglig kveld med fokus på forståelse av kroppen, hormoner og nervesystem.
+            Fagpersoner og erfaringsstemmer deler kunnskap og konkrete verktøy.
+          </p>
+          <div class="event-footer">
+            <div class="event-price">250<small>NOK</small></div>
+            <a href="#" class="btn-link">Les mer</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Retreat Bekkjarvik -->
+      <div class="event-card fade-in">
+        <div class="event-image">
+          <span class="event-badge">Retreat</span>
+          <span class="placeholder-label">Bilde</span>
+        </div>
+        <div class="event-body">
+          <div class="event-date">25–27 september 2025</div>
+          <h3 class="event-title">Retreat Bekkjarvik</h3>
+          <div class="event-location">Bekkjarvik Gjestgiveri, Austevoll</div>
+          <p class="event-desc">
+            Et tredagers retreat som kombinerer yoga, pilates og meditasjon med faglige
+            workshops, sauna og naturbaserte aktiviteter i en av Norges vakreste havner.
+          </p>
+          <div class="event-footer">
+            <div class="event-price">Pris på forespørsel</div>
+            <a href="#" class="btn-link">Les mer</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Retreat Balestrand -->
+      <div class="event-card fade-in">
+        <div class="event-image">
+          <span class="event-badge">Retreat</span>
+          <span class="placeholder-label">Bilde</span>
+        </div>
+        <div class="event-body">
+          <div class="event-date">22–25 oktober 2025</div>
+          <h3 class="event-title">Retreat Balestrand</h3>
+          <div class="event-location">Balestrand Hotell, Sognefjorden</div>
+          <p class="event-desc">
+            Fire dager omgitt av fjord, fjell og rolig natur. Yoga, meditasjon, faglige
+            workshops og tid til hvile og restitusjon i trygge og vakre omgivelser.
+          </p>
+          <div class="event-footer">
+            <div class="event-price">Pris på forespørsel</div>
+            <a href="#" class="btn-link">Les mer</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- TEAM -->
+  <section class="team-section">
+    <div class="team-inner">
+      <div class="section-label fade-in">Teamet</div>
+      <h2 class="fade-in">Menneskene bak aust</h2>
+      <div class="team-grid">
+
+        <div class="team-card fade-in">
+          <div class="team-photo">
+            <span class="placeholder-label">Bilde</span>
+          </div>
+          <div class="team-info">
+            <h3>Thea Misje Heggland</h3>
+            <div class="team-role">Grunnlegger</div>
+            <p>
+              Gjennom egen erfaring med langvarige helseutfordringer har Thea fått en dyp
+              interesse for sammenhengen mellom kropp, stress og nervesystem — og et sterkt
+              engasjement for å gjøre kunnskap om helhetlig helse tilgjengelig for flere.
+            </p>
+          </div>
+        </div>
+
+        <div class="team-card fade-in">
+          <div class="team-photo">
+            <span class="placeholder-label">Bilde</span>
+          </div>
+          <div class="team-info">
+            <h3>Susanne Nesse</h3>
+            <div class="team-role">Yogalærer & mentaltrener</div>
+            <p>
+              Sertifisert yogalærer innen Hatha og Yin (200h), 5-årig utdanning innen helse
+              og kosthold. Susanne skaper rom der alle er velkomne akkurat som de er — og
+              møter hver deltaker der de er.
+            </p>
+          </div>
+        </div>
+
+        <div class="team-card fade-in">
+          <div class="team-photo" style="background: linear-gradient(150deg, #4A6E78 0%, #8AB0B8 50%, #D8EAE8 100%);">
+            <span class="placeholder-label">Bilde</span>
+          </div>
+          <div class="team-info">
+            <h3>Synnøve Saenger</h3>
+            <div class="team-role">Yogalærer — Retreat Balestrand</div>
+            <p>
+              700 timer yogalærerutdanning fra Ecuador, Portugal, Mexico og Guatemala.
+              Synnøve tilpasser alltid timene til gruppen, og bringer det beste fra Vinyasa,
+              Hatha og Yin til retreaten.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- KONTAKT -->
+  <section class="kontakt" id="kontakt">
+    <div class="kontakt-inner">
+      <div class="kontakt-left">
+        <div class="logo-footer">aust</div>
+        <p>
+          Vi vil gjerne høre fra deg — enten du har spørsmål om et arrangement, ønsker
+          å samarbeide, eller bare vil vite mer om hva aust er.
+        </p>
+      </div>
+      <div class="kontakt-right">
+        <h3>Ta kontakt</h3>
+        <div class="kontakt-detail">
+          <label>E-post</label>
+          <a href="mailto:post@austcommunity.no">post@austcommunity.no</a>
+        </div>
+        <div class="kontakt-detail">
+          <label>Telefon</label>
+          <a href="tel:+4746744720">+47 467 44 720</a>
+        </div>
+      </div>
+    </div>
+    <div class="kontakt-inner footer-bottom">
+      <span>© 2025 aust — Alle rettigheter forbeholdes</span>
+      <span>Nettside av Rammeverket</span>
+    </div>
+  </section>
+
+  <script>
+    // Nav scroll behavior
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 60) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
+      }
+    });
+
+    // Scroll fade-in
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, 80);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Staggered cards
+    document.querySelectorAll('.event-card.fade-in, .team-card.fade-in').forEach((el, i) => {
+      observer.unobserve(el);
+      const cardObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            setTimeout(() => {
+              entry.target.classList.add('visible');
+            }, i * 100);
+            cardObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      cardObserver.observe(el);
+    });
+  </script>
+</body>
+</html>
