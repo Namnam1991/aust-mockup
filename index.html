@@ -18,7 +18,6 @@
       --brown-dark: #3A2A1E;
       --brown-mid: #7A5C48;
       --brown-light: #C4A882;
-      --warm-grey: #8A827A;
       --text-dark: #261E16;
       --text-mid: #5C5048;
       --text-light: #9A8E84;
@@ -26,9 +25,7 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     html { scroll-behavior: smooth; }
-
     body {
       font-family: 'DM Sans', sans-serif;
       background: var(--warm-white);
@@ -40,14 +37,14 @@
     /* ─── MOCKUP LABEL ─── */
     .mockup-label {
       position: fixed;
-      bottom: 24px;
-      right: 24px;
+      bottom: 20px;
+      right: 20px;
       background: var(--brown-dark);
       color: rgba(255,255,255,0.6);
-      font-size: 10px;
+      font-size: 9px;
       letter-spacing: 0.15em;
       text-transform: uppercase;
-      padding: 6px 12px;
+      padding: 5px 10px;
       border-radius: 2px;
       z-index: 9999;
       pointer-events: none;
@@ -56,9 +53,7 @@
     /* ─── NAV ─── */
     nav {
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
+      top: 0; left: 0; right: 0;
       z-index: 100;
       display: flex;
       align-items: center;
@@ -67,8 +62,8 @@
       transition: background 0.4s, padding 0.4s, border-bottom 0.4s;
     }
     nav.scrolled {
-      background: rgba(253, 250, 246, 0.96);
-      backdrop-filter: blur(8px);
+      background: rgba(253, 250, 246, 0.97);
+      backdrop-filter: blur(10px);
       padding: 18px 48px;
       border-bottom: 1px solid var(--border);
     }
@@ -81,6 +76,8 @@
       color: var(--cream);
       text-decoration: none;
       transition: color 0.4s;
+      position: relative;
+      z-index: 102;
     }
     nav.scrolled .nav-logo { color: var(--text-dark); }
 
@@ -100,28 +97,50 @@
     nav.scrolled .nav-links a { color: var(--text-mid); }
     .nav-links a:hover { color: var(--sage); }
 
+    /* ─── HAMBURGER ─── */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+      z-index: 102;
+      position: relative;
+    }
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 1.5px;
+      background: var(--cream);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    nav.scrolled .hamburger span,
+    nav.menu-open .hamburger span { background: var(--text-dark); }
+    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(4.5px, 4.5px); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(4.5px, -4.5px); }
+
     /* ─── HERO ─── */
     .hero {
       position: relative;
-      height: 100vh;
-      min-height: 600px;
+      height: 100svh;
+      min-height: 560px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       overflow: hidden;
       background:
-        linear-gradient(
-          170deg,
-          rgba(20, 32, 16, 0.88) 0%,
-          rgba(30, 45, 26, 0.70) 30%,
-          rgba(50, 65, 38, 0.45) 60%,
-          rgba(90, 80, 60, 0.20) 100%
+        linear-gradient(170deg,
+          rgba(20,32,16,0.88) 0%,
+          rgba(30,45,26,0.70) 30%,
+          rgba(50,65,38,0.45) 60%,
+          rgba(90,80,60,0.20) 100%
         ),
         url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=1900&q=80') center/cover no-repeat;
     }
-
-    /* Grain overlay */
     .hero::before {
       content: '';
       position: absolute;
@@ -131,8 +150,6 @@
       pointer-events: none;
       z-index: 1;
     }
-
-    /* Light vignette at edges */
     .hero::after {
       content: '';
       position: absolute;
@@ -141,7 +158,6 @@
       pointer-events: none;
       z-index: 1;
     }
-
     .hero-content {
       position: relative;
       z-index: 2;
@@ -150,35 +166,33 @@
       flex-direction: column;
       align-items: center;
       gap: 20px;
+      padding: 0 24px;
     }
-
     .hero-wordmark {
       font-family: 'Cormorant Garamond', serif;
       font-weight: 300;
-      font-size: clamp(80px, 16vw, 200px);
+      font-size: clamp(72px, 16vw, 200px);
       letter-spacing: 0.25em;
       color: var(--cream);
       line-height: 1;
       text-indent: 0.25em;
       opacity: 0;
       transform: translateY(20px);
-      animation: fadeUp 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s forwards;
+      animation: fadeUp 1.4s cubic-bezier(0.25,0.46,0.45,0.94) 0.3s forwards;
     }
-
     .hero-tagline {
       font-family: 'DM Sans', sans-serif;
       font-weight: 300;
-      font-size: 12px;
+      font-size: clamp(10px, 2.5vw, 12px);
       letter-spacing: 0.3em;
       text-transform: uppercase;
       color: rgba(247,243,236,0.7);
       opacity: 0;
       animation: fadeUp 1.2s ease 0.9s forwards;
     }
-
     .hero-scroll {
       position: absolute;
-      bottom: 40px;
+      bottom: 36px;
       left: 50%;
       transform: translateX(-50%);
       z-index: 2;
@@ -197,7 +211,7 @@
     }
     .scroll-line {
       width: 1px;
-      height: 40px;
+      height: 36px;
       background: linear-gradient(to bottom, rgba(247,243,236,0.5), transparent);
       animation: scrollLine 2s ease-in-out 2s infinite;
     }
@@ -230,24 +244,21 @@
       margin: 0 auto;
       padding: 120px 48px;
     }
-
     .about-inner {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 80px;
       align-items: center;
     }
-
     .about-text h2 {
       font-family: 'Cormorant Garamond', serif;
       font-weight: 300;
-      font-size: clamp(40px, 5vw, 64px);
+      font-size: clamp(36px, 5vw, 64px);
       line-height: 1.15;
       color: var(--text-dark);
       margin-bottom: 32px;
       letter-spacing: -0.01em;
     }
-
     .about-text p {
       font-size: 16px;
       line-height: 1.8;
@@ -255,7 +266,6 @@
       margin-bottom: 20px;
       font-weight: 300;
     }
-
     .about-text .navn-note {
       margin-top: 32px;
       padding-top: 32px;
@@ -264,7 +274,6 @@
       color: var(--text-light);
       font-style: italic;
     }
-
     .about-image {
       position: relative;
       aspect-ratio: 3/4;
@@ -290,13 +299,12 @@
     .visjon blockquote {
       font-family: 'Cormorant Garamond', serif;
       font-weight: 300;
-      font-size: clamp(22px, 3vw, 36px);
-      line-height: 1.6;
+      font-size: clamp(20px, 3vw, 36px);
+      line-height: 1.65;
       color: var(--cream);
       max-width: 800px;
       margin: 0 auto;
       font-style: italic;
-      letter-spacing: 0.01em;
     }
     .visjon cite {
       display: block;
@@ -317,9 +325,6 @@
     .events-header {
       max-width: 1200px;
       margin: 0 auto 64px;
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
     }
     .events-header h2 {
       font-family: 'Cormorant Garamond', serif;
@@ -328,15 +333,13 @@
       color: var(--text-dark);
       letter-spacing: -0.01em;
     }
-
     .events-grid {
       max-width: 1200px;
       margin: 0 auto;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 32px;
+      gap: 28px;
     }
-
     .event-card {
       display: flex;
       flex-direction: column;
@@ -348,9 +351,8 @@
     }
     .event-card:hover {
       transform: translateY(-6px);
-      box-shadow: 0 24px 48px rgba(42, 32, 24, 0.12);
+      box-shadow: 0 24px 48px rgba(42,32,24,0.12);
     }
-
     .event-image {
       aspect-ratio: 4/3;
       position: relative;
@@ -368,7 +370,6 @@
       background: linear-gradient(160deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.05) 60%);
       pointer-events: none;
     }
-
     .event-badge {
       font-size: 10px;
       letter-spacing: 0.18em;
@@ -381,9 +382,8 @@
       position: relative;
       z-index: 1;
     }
-
     .event-body {
-      padding: 28px 28px 32px;
+      padding: 24px 24px 28px;
       display: flex;
       flex-direction: column;
       flex: 1;
@@ -393,21 +393,21 @@
       letter-spacing: 0.15em;
       text-transform: uppercase;
       color: var(--sage);
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
     .event-title {
       font-family: 'Cormorant Garamond', serif;
       font-weight: 400;
-      font-size: 26px;
+      font-size: 24px;
       color: var(--text-dark);
-      margin-bottom: 12px;
-      line-height: 1.2;
+      margin-bottom: 8px;
+      line-height: 1.25;
     }
     .event-location {
       font-size: 12px;
       color: var(--text-light);
       letter-spacing: 0.05em;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
     .event-desc {
       font-size: 14px;
@@ -419,13 +419,13 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-top: 24px;
-      padding-top: 20px;
+      margin-top: 20px;
+      padding-top: 18px;
       border-top: 1px solid var(--border);
     }
     .event-price {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 22px;
+      font-size: 20px;
       font-weight: 400;
       color: var(--text-dark);
     }
@@ -484,6 +484,7 @@
       overflow: hidden;
       background-size: cover;
       background-position: center top;
+      flex-shrink: 0;
     }
     .team-info h3 {
       font-family: 'Cormorant Garamond', serif;
@@ -523,9 +524,9 @@
       font-weight: 300;
       font-size: clamp(60px, 10vw, 120px);
       letter-spacing: 0.25em;
-      color: rgba(247,243,236,0.08);
+      color: rgba(247,243,236,0.06);
       line-height: 1;
-      margin-bottom: 40px;
+      margin-bottom: 32px;
     }
     .kontakt-left p {
       font-size: 15px;
@@ -540,9 +541,7 @@
       color: var(--cream);
       margin-bottom: 40px;
     }
-    .kontakt-detail {
-      margin-bottom: 24px;
-    }
+    .kontakt-detail { margin-bottom: 24px; }
     .kontakt-detail label {
       display: block;
       font-size: 10px;
@@ -561,11 +560,10 @@
       transition: color 0.2s;
     }
     .kontakt-detail a:hover { color: var(--sage-light); }
-
     .footer-bottom {
       max-width: 1200px;
-      margin: 64px auto 0;
-      padding-top: 32px;
+      margin: 60px auto 0;
+      padding-top: 28px;
       border-top: 1px solid rgba(247,243,236,0.1);
       display: flex;
       justify-content: space-between;
@@ -575,13 +573,6 @@
       font-size: 11px;
       letter-spacing: 0.1em;
       color: rgba(247,243,236,0.25);
-    }
-
-    /* ─── DIVIDER ─── */
-    .divider {
-      width: 100%;
-      height: 1px;
-      background: var(--border);
     }
 
     /* ─── ANIMATIONS ─── */
@@ -595,7 +586,6 @@
       0%, 100% { transform: scaleY(0); transform-origin: top; }
       50% { transform: scaleY(1); transform-origin: top; }
     }
-
     .fade-in {
       opacity: 0;
       transform: translateY(24px);
@@ -606,25 +596,140 @@
       transform: translateY(0);
     }
 
-    /* ─── RESPONSIVE (basic) ─── */
-    @media (max-width: 768px) {
-      nav { padding: 20px 24px; }
-      section { padding: 80px 24px; }
-      .about-inner { grid-template-columns: 1fr; }
-      .events-grid { grid-template-columns: 1fr; }
-      .team-grid { grid-template-columns: 1fr; }
-      .kontakt-inner { grid-template-columns: 1fr; }
+    /* ═══════════════════════════════════════════
+       RESPONSIVE — TABLET (max 900px)
+    ═══════════════════════════════════════════ */
+    @media (max-width: 900px) {
+      nav { padding: 22px 32px; }
+      nav.scrolled { padding: 16px 32px; }
+
+      section { padding: 80px 32px; }
+      .about { padding: 80px 32px; }
+      .events-section { padding: 80px 32px; }
+      .team-section { padding: 80px 32px; }
+      .kontakt { padding: 80px 32px; }
+
+      .about-inner { gap: 48px; }
+      .events-grid { grid-template-columns: 1fr 1fr; gap: 20px; }
+      .team-grid { gap: 32px; }
+    }
+
+    /* ═══════════════════════════════════════════
+       RESPONSIVE — MOBILE (max 680px)
+    ═══════════════════════════════════════════ */
+    @media (max-width: 680px) {
+
+      /* Nav — hamburger */
+      nav { padding: 20px 20px; }
+      nav.scrolled { padding: 14px 20px; }
+
+      .hamburger { display: flex; }
+
+      .nav-links {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(253,250,246,0.98);
+        backdrop-filter: blur(12px);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 40px;
+        z-index: 101;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links a {
+        font-size: 15px;
+        letter-spacing: 0.2em;
+        color: var(--text-dark) !important;
+      }
+      .nav-links a:hover { color: var(--sage) !important; }
+
+      /* Hero */
+      .hero {
+        background-position: 65% center;
+      }
+      .hero-tagline {
+        letter-spacing: 0.2em;
+        font-size: 10px;
+      }
+      .hero-scroll { bottom: 28px; }
+
+      /* Sections */
+      section { padding: 64px 20px; }
+      .about { padding: 64px 20px; }
+      .events-section { padding: 64px 20px; }
+      .team-section { padding: 64px 20px; }
+      .kontakt { padding: 64px 20px; }
+      .visjon { padding: 72px 24px; }
+
+      /* About */
+      .about-inner {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .about-image {
+        aspect-ratio: 3/2;
+        max-height: 260px;
+        order: -1;
+      }
+      .about-text h2 { font-size: 36px; }
+      .about-text p { font-size: 15px; }
+
+      /* Events */
+      .events-grid { grid-template-columns: 1fr; gap: 20px; }
+      .events-header { margin-bottom: 40px; }
+      .event-card:hover { transform: none; }
+
+      /* Team */
+      .team-inner h2 { margin-bottom: 40px; }
+      .team-grid {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+      .team-card {
+        grid-template-columns: 100px 1fr;
+        gap: 20px;
+      }
+      .team-photo {
+        width: 100px;
+        height: 125px;
+      }
+      .team-info h3 { font-size: 20px; }
+      .team-info p { font-size: 13px; }
+
+      /* Kontakt */
+      .kontakt-inner {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .logo-footer { display: none; }
+      .kontakt-left p { max-width: 100%; }
+      .kontakt-right h3 { font-size: 28px; margin-bottom: 28px; }
+      .kontakt-detail a { font-size: 18px; }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+        margin-top: 40px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <div class="mockup-label">Mockup med bilder — Rammeverket for aust</div>
+  <div class="mockup-label">Mockup — Rammeverket for aust</div>
 
   <!-- NAV -->
   <nav id="nav">
     <a href="#" class="nav-logo">aust</a>
-    <ul class="nav-links">
+    <button class="hamburger" id="hamburger" aria-label="Åpne meny">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <ul class="nav-links" id="nav-links">
       <li><a href="#om">Om aust</a></li>
       <li><a href="#events">Events</a></li>
       <li><a href="#kontakt">Kontakt</a></li>
@@ -679,15 +784,12 @@
   <!-- EVENTS -->
   <section class="events-section" id="events">
     <div class="events-header fade-in">
-      <div>
-        <div class="section-label">Kommende</div>
-        <h2>Events</h2>
-      </div>
+      <div class="section-label">Kommende</div>
+      <h2>Events</h2>
     </div>
 
     <div class="events-grid">
 
-      <!-- Workshop -->
       <div class="event-card fade-in">
         <div class="event-image" style="background-image: url('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80');">
           <span class="event-badge">Workshop</span>
@@ -707,7 +809,6 @@
         </div>
       </div>
 
-      <!-- Retreat Bekkjarvik -->
       <div class="event-card fade-in">
         <div class="event-image" style="background-image: url('https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=800&q=80');">
           <span class="event-badge">Retreat</span>
@@ -727,7 +828,6 @@
         </div>
       </div>
 
-      <!-- Retreat Balestrand -->
       <div class="event-card fade-in">
         <div class="event-image" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=800&q=80');">
           <span class="event-badge">Retreat</span>
@@ -762,11 +862,7 @@
           <div class="team-info">
             <h3>Thea Misje Heggland</h3>
             <div class="team-role">Grunnlegger</div>
-            <p>
-              Gjennom egen erfaring med langvarige helseutfordringer har Thea fått en dyp
-              interesse for sammenhengen mellom kropp, stress og nervesystem — og et sterkt
-              engasjement for å gjøre kunnskap om helhetlig helse tilgjengelig for flere.
-            </p>
+            <p>Gjennom egen erfaring med langvarige helseutfordringer har Thea fått en dyp interesse for sammenhengen mellom kropp, stress og nervesystem — og et sterkt engasjement for å gjøre kunnskap om helhetlig helse tilgjengelig for flere.</p>
           </div>
         </div>
 
@@ -775,11 +871,7 @@
           <div class="team-info">
             <h3>Susanne Nesse</h3>
             <div class="team-role">Yogalærer & mentaltrener</div>
-            <p>
-              Sertifisert yogalærer innen Hatha og Yin (200h), 5-årig utdanning innen helse
-              og kosthold. Susanne skaper rom der alle er velkomne akkurat som de er — og
-              møter hver deltaker der de er.
-            </p>
+            <p>Sertifisert yogalærer innen Hatha og Yin (200h), 5-årig utdanning innen helse og kosthold. Susanne skaper rom der alle er velkomne akkurat som de er — og møter hver deltaker der de er.</p>
           </div>
         </div>
 
@@ -788,11 +880,7 @@
           <div class="team-info">
             <h3>Synnøve Saenger</h3>
             <div class="team-role">Yogalærer — Retreat Balestrand</div>
-            <p>
-              700 timer yogalærerutdanning fra Ecuador, Portugal, Mexico og Guatemala.
-              Synnøve tilpasser alltid timene til gruppen, og bringer det beste fra Vinyasa,
-              Hatha og Yin til retreaten.
-            </p>
+            <p>700 timer yogalærerutdanning fra Ecuador, Portugal, Mexico og Guatemala. Synnøve tilpasser alltid timene til gruppen, og bringer det beste fra Vinyasa, Hatha og Yin til retreaten.</p>
           </div>
         </div>
 
@@ -805,10 +893,7 @@
     <div class="kontakt-inner">
       <div class="kontakt-left">
         <div class="logo-footer">aust</div>
-        <p>
-          Vi vil gjerne høre fra deg — enten du har spørsmål om et arrangement, ønsker
-          å samarbeide, eller bare vil vite mer om hva aust er.
-        </p>
+        <p>Vi vil gjerne høre fra deg — enten du har spørsmål om et arrangement, ønsker å samarbeide, eller bare vil vite mer om hva aust er.</p>
       </div>
       <div class="kontakt-right">
         <h3>Ta kontakt</h3>
@@ -822,30 +907,44 @@
         </div>
       </div>
     </div>
-    <div class="kontakt-inner footer-bottom">
+    <div class="footer-bottom">
       <span>© 2025 aust — Alle rettigheter forbeholdes</span>
       <span>Nettside av Rammeverket</span>
     </div>
   </section>
 
   <script>
-    // Nav scroll behavior
+    // Nav scroll + menu-open state
     const nav = document.getElementById('nav');
     window.addEventListener('scroll', () => {
-      if (window.scrollY > 60) {
-        nav.classList.add('scrolled');
-      } else {
-        nav.classList.remove('scrolled');
-      }
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // Hamburger toggle
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('nav-links');
+
+    hamburger.addEventListener('click', () => {
+      const isOpen = navLinks.classList.toggle('open');
+      hamburger.classList.toggle('open', isOpen);
+      nav.classList.toggle('menu-open', isOpen);
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    });
+
+    navLinks.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        navLinks.classList.remove('open');
+        hamburger.classList.remove('open');
+        nav.classList.remove('menu-open');
+        document.body.style.overflow = '';
+      });
     });
 
     // Scroll fade-in
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry, i) => {
+      entries.forEach(entry => {
         if (entry.isIntersecting) {
-          setTimeout(() => {
-            entry.target.classList.add('visible');
-          }, 80);
+          setTimeout(() => entry.target.classList.add('visible'), 80);
           observer.unobserve(entry.target);
         }
       });
@@ -859,9 +958,7 @@
       const cardObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            setTimeout(() => {
-              entry.target.classList.add('visible');
-            }, i * 100);
+            setTimeout(() => entry.target.classList.add('visible'), i * 100);
             cardObserver.unobserve(entry.target);
           }
         });
