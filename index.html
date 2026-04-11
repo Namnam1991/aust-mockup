@@ -5,30 +5,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>aust — bevegelse · kunnskap · fellesskap</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --cream: #F7F3EC;
-      --sand: #EDE5D8;
-      --warm-white: #FDFAF6;
-      --forest: #2E3D28;
-      --forest-mid: #4A5E40;
+      --bg: #F2EDE5;
+      --cream: #EDE7DC;
+      --sand: #E4DDD2;
+      --forest: #2A3824;
+      --forest-mid: #445840;
       --sage: #7A8E6C;
       --sage-light: #B2C4A2;
       --brown-dark: #3A2A1E;
-      --brown-mid: #7A5C48;
-      --brown-light: #C4A882;
-      --text-dark: #261E16;
-      --text-mid: #5C5048;
-      --text-light: #9A8E84;
-      --border: #DDD4C4;
+      --text-dark: #1A140E;
+      --text-mid: #4A3E34;
+      --text-light: #8A7E74;
+      --border: #D4C9BA;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body {
       font-family: 'DM Sans', sans-serif;
-      background: var(--warm-white);
+      background: var(--bg);
       color: var(--text-dark);
       font-weight: 300;
       overflow-x: hidden;
@@ -36,723 +34,819 @@
 
     /* ─── MOCKUP LABEL ─── */
     .mockup-label {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: var(--brown-dark);
-      color: rgba(255,255,255,0.6);
-      font-size: 9px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      padding: 5px 10px;
-      border-radius: 2px;
-      z-index: 9999;
-      pointer-events: none;
+      position: fixed; bottom: 20px; right: 20px;
+      background: var(--brown-dark); color: rgba(255,255,255,0.5);
+      font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase;
+      padding: 5px 10px; border-radius: 2px; z-index: 9999; pointer-events: none;
     }
 
     /* ─── NAV ─── */
     nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
       padding: 28px 48px;
       transition: background 0.4s, padding 0.4s, border-bottom 0.4s;
     }
     nav.scrolled {
-      background: rgba(253, 250, 246, 0.97);
-      backdrop-filter: blur(10px);
-      padding: 18px 48px;
-      border-bottom: 1px solid var(--border);
+      background: rgba(242,237,229,0.97); backdrop-filter: blur(10px);
+      padding: 16px 48px; border-bottom: 1px solid var(--border);
     }
-
     .nav-logo {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 300;
-      font-size: 22px;
-      letter-spacing: 0.35em;
-      color: var(--cream);
-      text-decoration: none;
-      transition: color 0.4s;
-      position: relative;
-      z-index: 102;
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px;
+      letter-spacing: 0.35em; color: var(--bg); text-decoration: none;
+      transition: color 0.4s; position: relative; z-index: 102;
     }
-    nav.scrolled .nav-logo { color: var(--text-dark); }
+    nav.scrolled .nav-logo,
+    nav.menu-open .nav-logo { color: var(--text-dark); }
 
-    .nav-links {
-      display: flex;
-      gap: 40px;
-      list-style: none;
+    .nav-links { display: flex; gap: 36px; list-style: none; align-items: center; }
+    .nav-links > li > a {
+      font-family: 'Syne', sans-serif; font-weight: 700; font-size: 10px;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(242,237,229,0.75); text-decoration: none; transition: color 0.3s;
     }
-    .nav-links a {
-      font-size: 11px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: rgba(247,243,236,0.8);
-      text-decoration: none;
-      transition: color 0.3s;
-    }
-    nav.scrolled .nav-links a { color: var(--text-mid); }
-    .nav-links a:hover { color: var(--sage); }
+    nav.scrolled .nav-links > li > a { color: var(--text-mid); }
+    .nav-links > li > a:hover { color: var(--sage); }
 
-    /* ─── HAMBURGER ─── */
+    .nav-dropdown { position: relative; }
+    .nav-dropdown-menu {
+      position: absolute; top: calc(100% + 14px); left: 50%;
+      transform: translateX(-50%) translateY(-6px);
+      background: var(--bg); border: 1px solid var(--border); border-radius: 4px;
+      padding: 8px 0; min-width: 210px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s, transform 0.2s;
+      box-shadow: 0 8px 32px rgba(26,20,14,0.08);
+    }
+    .nav-dropdown:hover .nav-dropdown-menu {
+      opacity: 1; pointer-events: all; transform: translateX(-50%) translateY(0);
+    }
+    .nav-dropdown-menu a {
+      display: block; padding: 10px 20px;
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--text-mid) !important; transition: background 0.15s;
+    }
+    .nav-dropdown-menu a:hover { background: var(--cream); color: var(--text-dark) !important; }
+
     .hamburger {
-      display: none;
-      flex-direction: column;
-      gap: 5px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 6px;
-      z-index: 102;
-      position: relative;
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: 6px; z-index: 102;
     }
     .hamburger span {
-      display: block;
-      width: 24px;
-      height: 1.5px;
-      background: var(--cream);
-      transition: transform 0.3s ease, opacity 0.3s ease;
+      display: block; width: 24px; height: 1.5px; background: var(--bg);
+      transition: transform 0.3s, opacity 0.3s;
     }
     nav.scrolled .hamburger span,
     nav.menu-open .hamburger span { background: var(--text-dark); }
     .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(4.5px, 4.5px); }
-    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
     .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(4.5px, -4.5px); }
 
     /* ─── HERO ─── */
     .hero {
-      position: relative;
-      height: 100svh;
-      min-height: 560px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      background: #1a2614;
+      position: relative; height: 100svh; min-height: 560px;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      overflow: hidden; background: #151e10;
     }
     .hero-video {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: 0;
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; z-index: 0;
     }
     .hero-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(
-        170deg,
-        rgba(18,28,14,0.80) 0%,
-        rgba(28,42,22,0.65) 35%,
-        rgba(44,60,34,0.45) 65%,
-        rgba(20,16,10,0.55) 100%
-      );
-      z-index: 1;
+      position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(170deg,
+        rgba(15,24,10,0.85) 0%, rgba(26,38,18,0.68) 35%,
+        rgba(40,55,28,0.48) 65%, rgba(15,12,8,0.60) 100%);
     }
-    /* grain */
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
-      opacity: 0.035;
-      pointer-events: none;
-      z-index: 2;
-    }
-    /* vignette */
     .hero::after {
-      content: '';
-      position: absolute;
-      inset: 0;
+      content: ''; position: absolute; inset: 0; z-index: 2;
       background: radial-gradient(ellipse at center, transparent 35%, rgba(0,0,0,0.30) 100%);
       pointer-events: none;
-      z-index: 2;
     }
     .hero-content {
-      position: relative;
-      z-index: 3;
-
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-      padding: 0 24px;
+      position: relative; z-index: 3; text-align: center;
+      display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 0 24px;
+    }
+    .hero-eyebrow {
+      font-family: 'Syne', sans-serif; font-weight: 400; font-size: 11px;
+      letter-spacing: 0.4em; text-transform: uppercase;
+      color: rgba(242,237,229,0.55);
+      opacity: 0; animation: fadeUp 1s ease 0.2s forwards;
     }
     .hero-wordmark {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 300;
-      font-size: clamp(72px, 16vw, 200px);
-      letter-spacing: 0.25em;
-      color: var(--cream);
-      line-height: 1;
-      text-indent: 0.25em;
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeUp 1.4s cubic-bezier(0.25,0.46,0.45,0.94) 0.3s forwards;
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: clamp(80px, 17vw, 220px);
+      letter-spacing: 0.18em; color: var(--bg); line-height: 1;
+      text-indent: 0.18em;
+      opacity: 0; transform: translateY(20px);
+      animation: fadeUp 1.4s cubic-bezier(0.25,0.46,0.45,0.94) 0.4s forwards;
     }
     .hero-tagline {
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 300;
-      font-size: clamp(10px, 2.5vw, 12px);
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: rgba(247,243,236,0.7);
-      opacity: 0;
-      animation: fadeUp 1.2s ease 0.9s forwards;
+      font-family: 'DM Sans', sans-serif; font-weight: 300;
+      font-size: clamp(9px, 2vw, 11px); letter-spacing: 0.35em;
+      text-transform: uppercase; color: rgba(242,237,229,0.45);
+      opacity: 0; animation: fadeUp 1s ease 1s forwards;
     }
     .hero-scroll {
-      position: absolute;
-      bottom: 36px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 3;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      opacity: 0;
-      animation: fadeIn 1s ease 1.6s forwards;
+      position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+      z-index: 3; display: flex; flex-direction: column; align-items: center; gap: 8px;
+      opacity: 0; animation: fadeIn 1s ease 1.8s forwards;
     }
     .hero-scroll span {
-      font-size: 10px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: rgba(247,243,236,0.5);
+      font-family: 'Syne', sans-serif; font-size: 9px;
+      letter-spacing: 0.3em; text-transform: uppercase; color: rgba(242,237,229,0.35);
     }
     .scroll-line {
-      width: 1px;
-      height: 36px;
-      background: linear-gradient(to bottom, rgba(247,243,236,0.5), transparent);
+      width: 1px; height: 36px;
+      background: linear-gradient(to bottom, rgba(242,237,229,0.35), transparent);
       animation: scrollLine 2s ease-in-out 2s infinite;
     }
 
-    /* ─── SECTION SHARED ─── */
-    section { padding: 120px 48px; }
-
+    /* ─── SHARED ─── */
     .section-label {
-      font-size: 10px;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--sage);
-      margin-bottom: 32px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
+      font-family: 'Syne', sans-serif; font-weight: 700; font-size: 10px;
+      letter-spacing: 0.3em; text-transform: uppercase; color: var(--sage);
+      display: flex; align-items: center; gap: 14px; margin-bottom: 24px;
     }
     .section-label::after {
-      content: '';
-      display: block;
-      width: 40px;
-      height: 1px;
-      background: var(--sage);
+      content: ''; display: block; width: 36px; height: 1px; background: var(--sage);
     }
+    .section-label.light { color: var(--sage-light); }
+    .section-label.light::after { background: var(--sage-light); }
+    .section-label.centered { justify-content: center; }
 
     /* ─── OM AUST ─── */
-    .about {
-      background: var(--warm-white);
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 120px 48px;
+    .om-section { background: var(--bg); padding: 120px 48px; }
+    .om-inner { max-width: 1100px; margin: 0 auto; }
+
+    .om-intro {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+      padding-bottom: 80px; border-bottom: 1px solid var(--border); margin-bottom: 80px;
     }
-    .about-inner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px;
-      align-items: center;
+    .om-text h2 {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: clamp(36px, 5vw, 64px); line-height: 1.05;
+      color: var(--text-dark); margin-bottom: 28px; letter-spacing: -0.02em;
     }
-    .about-text h2 {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 300;
-      font-size: clamp(36px, 5vw, 64px);
-      line-height: 1.15;
-      color: var(--text-dark);
-      margin-bottom: 32px;
-      letter-spacing: -0.01em;
+    .om-text p {
+      font-size: 16px; line-height: 1.85; color: var(--text-mid);
+      margin-bottom: 16px; font-weight: 300;
     }
-    .about-text p {
-      font-size: 16px;
-      line-height: 1.8;
-      color: var(--text-mid);
-      margin-bottom: 20px;
-      font-weight: 300;
+    .navn-note {
+      margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border);
+      font-size: 14px; color: var(--text-light); font-style: italic; line-height: 1.7;
     }
-    .about-text .navn-note {
-      margin-top: 32px;
-      padding-top: 32px;
-      border-top: 1px solid var(--border);
-      font-size: 14px;
-      color: var(--text-light);
-      font-style: italic;
+    .om-pillars {
+      display: flex; flex-direction: column; gap: 0;
+      background: var(--cream); border-radius: 4px; overflow: hidden;
+      border: 1px solid var(--border);
     }
-    .about-image {
-      position: relative;
-      aspect-ratio: 3/4;
-      border-radius: 4px;
-      overflow: hidden;
-      background-image: url('https://images.unsplash.com/photo-1545389336-cf090694435e?auto=format&fit=crop&w=800&q=80');
-      background-size: cover;
-      background-position: center;
+    .pillar {
+      padding: 28px 32px; border-bottom: 1px solid var(--border);
     }
-    .about-image::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to top, rgba(46,61,40,0.25) 0%, transparent 60%);
+    .pillar:last-child { border-bottom: none; }
+    .pillar-title {
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px;
+      color: var(--text-dark); margin-bottom: 6px; letter-spacing: -0.01em;
+    }
+    .pillar-desc { font-size: 14px; color: var(--text-light); line-height: 1.6; }
+
+    /* Visjon */
+    .visjon-block {
+      text-align: center; padding: 80px 48px;
+      background: var(--forest); margin: 0 -48px 80px;
+    }
+    .visjon-block blockquote {
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: clamp(20px, 3.2vw, 36px); line-height: 1.45;
+      color: var(--cream); max-width: 820px; margin: 0 auto; letter-spacing: -0.01em;
+    }
+    .visjon-block cite {
+      display: block; margin-top: 24px;
+      font-family: 'DM Sans', sans-serif; font-style: normal;
+      font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--sage-light);
     }
 
-    /* ─── VISJON ─── */
-    .visjon {
-      background: var(--forest);
-      padding: 100px 48px;
-      text-align: center;
+    /* Grunnlegger */
+    .grunnlegger {
+      display: grid; grid-template-columns: 300px 1fr; gap: 64px; align-items: start;
     }
-    .visjon blockquote {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 300;
-      font-size: clamp(20px, 3vw, 36px);
-      line-height: 1.65;
-      color: var(--cream);
-      max-width: 800px;
-      margin: 0 auto;
-      font-style: italic;
+    .grunnlegger-photo {
+      width: 100%; aspect-ratio: 3/4; border-radius: 4px; overflow: hidden;
+      background-image: url('images/thea.jpg');
+      background-size: cover; background-position: center 20%;
     }
-    .visjon cite {
-      display: block;
-      margin-top: 32px;
-      font-family: 'DM Sans', sans-serif;
-      font-style: normal;
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--sage-light);
+    .grunnlegger-text h3 {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: clamp(28px, 4vw, 52px); line-height: 1.05;
+      color: var(--text-dark); margin-bottom: 20px; letter-spacing: -0.02em;
+    }
+    .grunnlegger-text p {
+      font-size: 15px; line-height: 1.85; color: var(--text-mid);
+      margin-bottom: 14px; font-weight: 300;
     }
 
     /* ─── EVENTS ─── */
-    .events-section {
-      background: var(--cream);
-      padding: 120px 48px;
-    }
-    .events-header {
-      max-width: 1200px;
-      margin: 0 auto 64px;
-    }
+    .events-section { background: var(--forest); padding: 120px 48px; }
+    .events-header { max-width: 1100px; margin: 0 auto 56px; }
     .events-header h2 {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 300;
-      font-size: clamp(36px, 5vw, 60px);
-      color: var(--text-dark);
-      letter-spacing: -0.01em;
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: clamp(48px, 8vw, 100px); line-height: 1; letter-spacing: -0.03em;
+      color: var(--cream);
     }
     .events-grid {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 28px;
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
     }
     .event-card {
-      display: flex;
-      flex-direction: column;
-      background: var(--warm-white);
-      border-radius: 4px;
-      overflow: hidden;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      cursor: pointer;
+      position: relative; aspect-ratio: 2/3;
+      overflow: hidden; cursor: pointer; background: #1e2a16;
     }
-    .event-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 24px 48px rgba(42,32,24,0.12);
+    .event-card-bg {
+      position: absolute; inset: 0; background-size: cover; background-position: center;
+      transition: transform 0.65s ease;
     }
-    .event-image {
-      aspect-ratio: 4/3;
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      align-items: flex-start;
-      padding: 20px;
-      background-size: cover;
-      background-position: center;
+    .event-card:hover .event-card-bg { transform: scale(1.05); }
+    .event-card-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top,
+        rgba(15,22,10,0.95) 0%, rgba(15,22,10,0.40) 50%, rgba(15,22,10,0.10) 100%);
+      transition: background 0.3s;
     }
-    .event-image::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(160deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.05) 60%);
-      pointer-events: none;
+    .event-card-content {
+      position: absolute; bottom: 0; left: 0; right: 0; padding: 32px 28px;
     }
-    .event-badge {
-      font-size: 10px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: rgba(247,243,236,0.9);
-      background: rgba(0,0,0,0.28);
-      padding: 5px 10px;
-      border-radius: 2px;
-      backdrop-filter: blur(4px);
-      position: relative;
-      z-index: 1;
-    }
-    .event-body {
-      padding: 24px 24px 28px;
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-    }
-    .event-date {
-      font-size: 11px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--sage);
+    .event-card-badge {
+      font-family: 'Syne', sans-serif; font-weight: 700; font-size: 9px;
+      letter-spacing: 0.28em; text-transform: uppercase; color: var(--sage-light);
       margin-bottom: 10px;
     }
-    .event-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 400;
-      font-size: 24px;
-      color: var(--text-dark);
-      margin-bottom: 8px;
-      line-height: 1.25;
+    .event-card-title {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: clamp(20px, 2.5vw, 30px); color: var(--cream);
+      line-height: 1.1; margin-bottom: 8px; letter-spacing: -0.01em;
     }
-    .event-location {
-      font-size: 12px;
-      color: var(--text-light);
-      letter-spacing: 0.05em;
-      margin-bottom: 14px;
+    .event-card-meta {
+      font-size: 12px; color: rgba(242,237,229,0.45);
+      letter-spacing: 0.04em; margin-bottom: 20px; line-height: 1.5;
     }
-    .event-desc {
-      font-size: 14px;
-      line-height: 1.7;
-      color: var(--text-mid);
-      flex: 1;
+    .event-card-cta {
+      font-family: 'Syne', sans-serif; font-weight: 700; font-size: 10px;
+      letter-spacing: 0.22em; text-transform: uppercase; color: var(--cream);
+      display: flex; align-items: center; gap: 10px; transition: gap 0.2s;
     }
-    .event-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 20px;
-      padding-top: 18px;
-      border-top: 1px solid var(--border);
-    }
-    .event-price {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 20px;
-      font-weight: 400;
-      color: var(--text-dark);
-    }
-    .event-price small {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 12px;
-      color: var(--text-light);
-      margin-left: 4px;
-    }
-    .btn-link {
-      font-size: 11px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--sage);
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: gap 0.2s;
-    }
-    .btn-link:hover { gap: 14px; }
-    .btn-link::after { content: '→'; }
+    .event-card:hover .event-card-cta { gap: 18px; }
+    .event-card-cta::after { content: '→'; font-size: 14px; }
 
-    /* ─── TEAM ─── */
-    .team-section {
-      background: var(--sand);
-      padding: 120px 48px;
+    /* ─── MODALS ─── */
+    .event-modal {
+      position: fixed; inset: 0; background: var(--bg); z-index: 500;
+      overflow-y: auto; overflow-x: hidden;
+      transform: translateY(100%);
+      transition: transform 0.55s cubic-bezier(0.32, 0.72, 0, 1);
+      will-change: transform;
     }
-    .team-inner {
-      max-width: 1200px;
-      margin: 0 auto;
+    .event-modal.open { transform: translateY(0); }
+
+    .modal-close {
+      position: fixed; top: 24px; right: 28px; z-index: 502;
+      background: var(--bg); border: 1px solid var(--border); border-radius: 50%;
+      width: 44px; height: 44px; cursor: pointer; display: flex;
+      align-items: center; justify-content: center;
+      color: var(--text-dark); font-size: 16px;
+      transition: background 0.2s; font-family: 'DM Sans', sans-serif; font-weight: 300;
+      box-shadow: 0 2px 12px rgba(26,20,14,0.08);
     }
-    .team-inner h2 {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 300;
-      font-size: clamp(36px, 5vw, 60px);
-      color: var(--text-dark);
-      margin-bottom: 64px;
-      letter-spacing: -0.01em;
+    .modal-close:hover { background: var(--cream); }
+
+    .modal-hero {
+      height: 56vh; min-height: 360px; position: relative; overflow: hidden;
+      background: var(--forest);
     }
-    .team-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 48px;
+    .modal-hero-bg {
+      position: absolute; inset: 0; background-size: cover; background-position: center;
+      opacity: 0.65;
     }
-    .team-card {
-      display: grid;
-      grid-template-columns: 140px 1fr;
-      gap: 28px;
-      align-items: start;
+    .modal-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(15,22,10,0.88) 0%, rgba(15,22,10,0.15) 65%);
     }
-    .team-photo {
-      width: 140px;
-      height: 175px;
-      border-radius: 4px;
-      overflow: hidden;
-      background-size: cover;
-      background-position: center top;
-      flex-shrink: 0;
+    .modal-hero-content {
+      position: absolute; bottom: 48px; left: 0; right: 0; padding: 0 64px;
     }
-    .team-info h3 {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 400;
-      font-size: 24px;
-      color: var(--text-dark);
-      margin-bottom: 6px;
+    .modal-hero-eyebrow {
+      font-family: 'Syne', sans-serif; font-weight: 700; font-size: 10px;
+      letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--sage-light); margin-bottom: 12px;
     }
-    .team-info .team-role {
-      font-size: 11px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--sage);
-      margin-bottom: 14px;
+    .modal-hero-title {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: clamp(32px, 6vw, 72px); color: var(--cream);
+      line-height: 1.05; letter-spacing: -0.02em;
     }
-    .team-info p {
-      font-size: 14px;
-      line-height: 1.75;
-      color: var(--text-mid);
+    .modal-hero-sub {
+      margin-top: 14px; font-size: 14px; color: rgba(242,237,229,0.5);
+      letter-spacing: 0.05em;
+    }
+
+    .modal-body { max-width: 820px; margin: 0 auto; padding: 80px 48px 120px; }
+
+    .modal-block {
+      margin-bottom: 56px; padding-bottom: 56px; border-bottom: 1px solid var(--border);
+    }
+    .modal-block:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .modal-block h3 {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: clamp(22px, 3vw, 34px); color: var(--text-dark);
+      margin-bottom: 20px; letter-spacing: -0.02em; line-height: 1.1;
+    }
+    .modal-block p {
+      font-size: 16px; line-height: 1.85; color: var(--text-mid);
+      margin-bottom: 14px; font-weight: 300;
+    }
+    .modal-block p:last-child { margin-bottom: 0; }
+
+    .modal-list { list-style: none; padding: 0; margin-top: 8px; }
+    .modal-list li {
+      font-size: 15px; line-height: 1.65; color: var(--text-mid); font-weight: 300;
+      padding: 10px 0; border-bottom: 1px solid var(--border);
+      display: flex; align-items: flex-start; gap: 14px;
+    }
+    .modal-list li:first-child { border-top: 1px solid var(--border); }
+    .modal-list li::before {
+      content: ''; width: 5px; height: 5px; border-radius: 50%;
+      background: var(--sage); flex-shrink: 0; margin-top: 7px;
+    }
+
+    .program-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; }
+    .program-day h4 {
+      font-family: 'Syne', sans-serif; font-weight: 700; font-size: 11px;
+      letter-spacing: 0.25em; text-transform: uppercase; color: var(--sage);
+      margin-bottom: 14px; padding-bottom: 10px; border-bottom: 2px solid var(--sage);
+    }
+    .program-day ul { list-style: none; padding: 0; }
+    .program-day ul li {
+      font-size: 14px; color: var(--text-mid); font-weight: 300;
+      padding: 8px 0; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .program-day ul li:last-child { border-bottom: none; }
+    .program-day ul li::before {
+      content: ''; width: 4px; height: 4px; border-radius: 50%;
+      background: var(--border); flex-shrink: 0;
+    }
+
+    .modal-team-card {
+      display: grid; grid-template-columns: 160px 1fr; gap: 32px; align-items: start;
+      background: var(--cream); border-radius: 4px; padding: 32px; margin-top: 20px;
+    }
+    .modal-team-photo {
+      width: 160px; height: 200px; border-radius: 4px;
+      background-size: cover; background-position: center top;
+    }
+    .modal-team-info h4 {
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 22px;
+      color: var(--text-dark); margin-bottom: 4px; letter-spacing: -0.01em;
+    }
+    .modal-team-role {
+      font-family: 'Syne', sans-serif; font-weight: 700; font-size: 9px;
+      letter-spacing: 0.25em; text-transform: uppercase; color: var(--sage);
+      margin-bottom: 16px;
+    }
+    .modal-team-info p {
+      font-size: 14px; line-height: 1.8; color: var(--text-mid); font-weight: 300;
+    }
+
+    .modal-pris { display: flex; align-items: baseline; gap: 8px; margin-top: 4px; }
+    .modal-pris-amount {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: clamp(48px, 7vw, 80px); color: var(--text-dark);
+      letter-spacing: -0.03em; line-height: 1;
+    }
+    .modal-pris-label {
+      font-family: 'DM Sans', sans-serif; font-size: 15px;
+      color: var(--text-light); font-weight: 300;
     }
 
     /* ─── KONTAKT ─── */
-    .kontakt {
-      background: var(--brown-dark);
-      padding: 100px 48px;
-    }
+    .kontakt { background: var(--brown-dark); padding: 120px 48px; }
     .kontakt-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px;
-      align-items: center;
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
     }
-    .kontakt-left .logo-footer {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 300;
-      font-size: clamp(60px, 10vw, 120px);
-      letter-spacing: 0.25em;
-      color: rgba(247,243,236,0.06);
-      line-height: 1;
-      margin-bottom: 32px;
+    .kontakt-wordmark {
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: clamp(64px, 12vw, 140px); line-height: 0.9;
+      letter-spacing: -0.02em; color: rgba(242,237,229,0.06);
+      margin-bottom: 28px;
     }
     .kontakt-left p {
-      font-size: 15px;
-      line-height: 1.75;
-      color: rgba(247,243,236,0.55);
-      max-width: 380px;
+      font-size: 15px; line-height: 1.8; color: rgba(242,237,229,0.48); max-width: 360px;
     }
     .kontakt-right h3 {
-      font-family: 'Cormorant Garamond', serif;
-      font-weight: 300;
-      font-size: 36px;
-      color: var(--cream);
-      margin-bottom: 40px;
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: clamp(28px, 4vw, 48px); color: var(--cream);
+      margin-bottom: 40px; letter-spacing: -0.02em; line-height: 1.1;
     }
-    .kontakt-detail { margin-bottom: 24px; }
+    .kontakt-detail { margin-bottom: 28px; }
     .kontakt-detail label {
-      display: block;
-      font-size: 10px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--sage-light);
-      margin-bottom: 6px;
+      display: block; font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--sage-light); margin-bottom: 8px;
     }
     .kontakt-detail a {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 22px;
-      font-weight: 300;
-      color: var(--cream);
-      text-decoration: none;
-      letter-spacing: 0.02em;
-      transition: color 0.2s;
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: clamp(18px, 2.5vw, 26px); color: var(--cream);
+      text-decoration: none; letter-spacing: -0.01em; transition: color 0.2s;
     }
     .kontakt-detail a:hover { color: var(--sage-light); }
-    .footer-bottom {
-      max-width: 1200px;
-      margin: 60px auto 0;
-      padding-top: 28px;
-      border-top: 1px solid rgba(247,243,236,0.1);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--brown-dark); border-top: 1px solid rgba(242,237,229,0.07);
+      padding: 28px 48px;
     }
-    .footer-bottom span {
-      font-size: 11px;
-      letter-spacing: 0.1em;
-      color: rgba(247,243,236,0.25);
+    .footer-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .footer-inner span {
+      font-family: 'Syne', sans-serif; font-size: 10px;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(242,237,229,0.2);
     }
 
     /* ─── ANIMATIONS ─── */
-    @keyframes fadeUp {
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeIn {
-      to { opacity: 1; }
-    }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { to { opacity: 1; } }
     @keyframes scrollLine {
       0%, 100% { transform: scaleY(0); transform-origin: top; }
       50% { transform: scaleY(1); transform-origin: top; }
     }
     .fade-in {
-      opacity: 0;
-      transform: translateY(24px);
+      opacity: 0; transform: translateY(24px);
       transition: opacity 0.7s ease, transform 0.7s ease;
     }
-    .fade-in.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
 
-    /* ═══════════════════════════════════════════
-       RESPONSIVE — TABLET (max 900px)
-    ═══════════════════════════════════════════ */
-    @media (max-width: 900px) {
+    /* ─── TABLET ─── */
+    @media (max-width: 960px) {
       nav { padding: 22px 32px; }
-      nav.scrolled { padding: 16px 32px; }
-
-      section { padding: 80px 32px; }
-      .about { padding: 80px 32px; }
+      nav.scrolled { padding: 15px 32px; }
+      .om-section { padding: 80px 32px; }
       .events-section { padding: 80px 32px; }
-      .team-section { padding: 80px 32px; }
       .kontakt { padding: 80px 32px; }
-
-      .about-inner { gap: 48px; }
-      .events-grid { grid-template-columns: 1fr 1fr; gap: 20px; }
-      .team-grid { gap: 32px; }
+      footer { padding: 24px 32px; }
+      .om-intro { grid-template-columns: 1fr; gap: 48px; }
+      .grunnlegger { grid-template-columns: 240px 1fr; gap: 48px; }
+      .events-grid { grid-template-columns: 1fr 1fr; }
+      .event-card { aspect-ratio: 3/4; }
+      .program-grid { grid-template-columns: 1fr; }
+      .modal-body { padding: 60px 36px 80px; }
+      .modal-hero-content { padding: 0 36px; }
+      .visjon-block { padding: 72px 32px; margin: 0 -32px 72px; }
     }
 
-    /* ═══════════════════════════════════════════
-       RESPONSIVE — MOBILE (max 680px)
-    ═══════════════════════════════════════════ */
+    /* ─── MOBILE ─── */
     @media (max-width: 680px) {
-
-      /* Nav — hamburger */
-      nav { padding: 20px 20px; }
-      nav.scrolled { padding: 14px 20px; }
-
+      nav { padding: 18px 20px; }
+      nav.scrolled { padding: 13px 20px; }
       .hamburger { display: flex; }
-
       .nav-links {
-        display: none;
-        position: fixed;
-        inset: 0;
-        background: rgba(253,250,246,0.98);
-        backdrop-filter: blur(12px);
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 40px;
-        z-index: 101;
+        display: none; position: fixed; inset: 0;
+        background: rgba(242,237,229,0.98); backdrop-filter: blur(12px);
+        flex-direction: column; align-items: center; justify-content: center;
+        gap: 28px; z-index: 101;
       }
       .nav-links.open { display: flex; }
-      .nav-links a {
-        font-size: 15px;
-        letter-spacing: 0.2em;
-        color: var(--text-dark) !important;
+      .nav-links.open > li > a {
+        font-size: 13px; letter-spacing: 0.22em; color: var(--text-dark) !important;
       }
-      .nav-links a:hover { color: var(--sage) !important; }
+      .nav-dropdown-menu { display: none !important; }
 
-      /* Hero */
-      .hero {
-        background-position: 65% center;
-      }
-      .hero-tagline {
-        letter-spacing: 0.2em;
-        font-size: 10px;
-      }
-      .hero-scroll { bottom: 28px; }
-
-      /* Sections */
-      section { padding: 64px 20px; }
-      .about { padding: 64px 20px; }
+      .om-section { padding: 64px 20px; }
       .events-section { padding: 64px 20px; }
-      .team-section { padding: 64px 20px; }
       .kontakt { padding: 64px 20px; }
-      .visjon { padding: 72px 24px; }
+      footer { padding: 20px 20px; }
 
-      /* About */
-      .about-inner {
-        grid-template-columns: 1fr;
-        gap: 40px;
-      }
-      .about-image {
-        aspect-ratio: 3/2;
-        max-height: 260px;
-        order: -1;
-      }
-      .about-text h2 { font-size: 36px; }
-      .about-text p { font-size: 15px; }
+      .om-intro { grid-template-columns: 1fr; gap: 36px; }
+      .grunnlegger { grid-template-columns: 1fr; gap: 28px; }
+      .grunnlegger-photo { aspect-ratio: 4/3; max-height: 260px; }
 
-      /* Events */
-      .events-grid { grid-template-columns: 1fr; gap: 20px; }
-      .events-header { margin-bottom: 40px; }
-      .event-card:hover { transform: none; }
+      .visjon-block { padding: 60px 20px; margin: 0 -20px 64px; }
 
-      /* Team */
-      .team-inner h2 { margin-bottom: 40px; }
-      .team-grid {
-        grid-template-columns: 1fr;
-        gap: 36px;
-      }
-      .team-card {
-        grid-template-columns: 100px 1fr;
-        gap: 20px;
-      }
-      .team-photo {
-        width: 100px;
-        height: 125px;
-      }
-      .team-info h3 { font-size: 20px; }
-      .team-info p { font-size: 13px; }
+      .events-grid { grid-template-columns: 1fr; }
+      .event-card { aspect-ratio: 4/3; }
 
-      /* Kontakt */
-      .kontakt-inner {
-        grid-template-columns: 1fr;
-        gap: 40px;
-      }
-      .logo-footer { display: none; }
-      .kontakt-left p { max-width: 100%; }
-      .kontakt-right h3 { font-size: 28px; margin-bottom: 28px; }
-      .kontakt-detail a { font-size: 18px; }
+      .kontakt-inner { grid-template-columns: 1fr; gap: 40px; }
+      .kontakt-wordmark { font-size: 64px; }
 
-      .footer-bottom {
-        flex-direction: column;
-        gap: 10px;
-        text-align: center;
-        margin-top: 40px;
-      }
+      .modal-hero { height: 44vh; min-height: 260px; }
+      .modal-hero-content { bottom: 24px; padding: 0 20px; }
+      .modal-body { padding: 48px 20px 80px; }
+      .modal-close { top: 16px; right: 16px; }
+      .modal-team-card { grid-template-columns: 1fr; padding: 20px; }
+      .modal-team-photo { width: 100%; height: 220px; }
+      .program-grid { grid-template-columns: 1fr; }
+
+      .footer-inner { flex-direction: column; gap: 8px; text-align: center; }
     }
   </style>
 </head>
 <body>
 
-  <div class="mockup-label">Mockup — Rammeverket for aust</div>
+  <div class="mockup-label">Rammeverket for aust</div>
 
-  <!-- NAV -->
+  <!-- ══════════════════════════════════════
+       MODALS
+  ══════════════════════════════════════ -->
+
+  <!-- Workshop -->
+  <div class="event-modal" id="modal-workshop">
+    <button class="modal-close" onclick="closeModal('modal-workshop')">✕</button>
+    <div class="modal-hero">
+      <div class="modal-hero-bg" style="background-image: url('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1400&q=80');"></div>
+      <div class="modal-hero-overlay"></div>
+      <div class="modal-hero-content">
+        <div class="modal-hero-eyebrow">Workshop · August 2025 · Bergen</div>
+        <h1 class="modal-hero-title">Endometriose<br>& adenomyose</h1>
+        <div class="modal-hero-sub">Litteraturhuset, Bergen · 250 NOK</div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-block">
+        <h3>Om workshopen</h3>
+        <p>I august inviterer aust til en faglig workshop på Litteraturhuset i Bergen med fokus på endometriose og adenomyose. Arrangementet samler fagpersoner og bidragsytere med både faglig og personlig erfaring, som deler innsikt og konkrete verktøy fra ulike perspektiver.</p>
+        <p>Gjennom workshopen vil deltakerne få økt forståelse av hvordan disse tilstandene påvirker kroppen, og hvordan hormoner, stress og nervesystem spiller sammen over tid. Det vil introduseres praktiske tilnærminger knyttet til regulering, pust og kroppslig tilstedeværelse, med mål om å gi deltakerne noe konkret å ta med seg videre i hverdagen.</p>
+        <p>Arrangementet legger til rette for en trygg og rolig ramme, med rom for refleksjon, gjenkjennelse og fellesskap. Målet er å styrke deltakernes egenmestring, redusere stigma og bidra til økt forståelse og ivaretakelse av jenter og kvinner som lever med endometriose og adenomyose.</p>
+      </div>
+      <div class="modal-block">
+        <h3>Behovet</h3>
+        <p>Omtrent 1 av 10 kvinner globalt lever med endometriose, og mange har også adenomyose. Samtidig er det store mørketall, og mange går i flere år uten diagnose eller tilstrekkelig oppfølging.</p>
+        <p>Det er et tydelig behov for lavterskeltilbud som kombinerer informasjon, praktiske verktøy og trygge møteplasser. Denne workshopen svarer på dette behovet ved å dele kunnskap og erfaringer, bidra til økt forståelse og skape en opplevelse av fellesskap.</p>
+      </div>
+      <div class="modal-block">
+        <h3>Teamet du vil møte</h3>
+        <div class="modal-team-card">
+          <div class="modal-team-photo" style="background-image: url('images/thea.jpg'); background-position: center 20%;"></div>
+          <div class="modal-team-info">
+            <h4>Thea Misje Heggland</h4>
+            <div class="modal-team-role">Grunnlegger, aust</div>
+            <p>Thea vil dele sin helsereise med endometriose og adenomyose, og perspektivene hun har utviklet underveis. Gjennom flere år med kroniske smerter erfarte hun at kroppen måtte forstås i en mye større sammenheng. Hun ønsker å dele innsikt fra denne reisen med mål om å gi økt forståelse, håp og konkrete verktøy.</p>
+          </div>
+        </div>
+        <div class="modal-team-card">
+          <div class="modal-team-photo" style="background: linear-gradient(135deg, #445840 0%, #8A9E7A 100%);"></div>
+          <div class="modal-team-info">
+            <h4>Ida Tønseth</h4>
+            <div class="modal-team-role">Bidragsyter</div>
+            <p>Ida vil ta dere med gjennom sin reise med endometriose, fra utfordringene det har hatt til veien hun har gått for å komme seg ut av det. Med nysgjerrighet og åpenhet har hun utforsket hva som faktisk fungerer, og ønsker å formidle håp, kunnskap og inspirasjon til andre som vil ta livet tilbake.</p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-block">
+        <h3>Pris</h3>
+        <div class="modal-pris">
+          <span class="modal-pris-amount">250</span>
+          <span class="modal-pris-label">NOK per person</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bekkjarvik -->
+  <div class="event-modal" id="modal-bekkjarvik">
+    <button class="modal-close" onclick="closeModal('modal-bekkjarvik')">✕</button>
+    <div class="modal-hero">
+      <div class="modal-hero-bg" style="background-image: url('https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=1400&q=80');"></div>
+      <div class="modal-hero-overlay"></div>
+      <div class="modal-hero-content">
+        <div class="modal-hero-eyebrow">Retreat · 25–27 september 2025</div>
+        <h1 class="modal-hero-title">Mellom hav<br>og ro</h1>
+        <div class="modal-hero-sub">Bekkjarvik Gjestgiveri, Austevoll · 6 500 NOK</div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-block">
+        <h3>Om retreaten</h3>
+        <p>25.–27. september inviterer aust til et tredagers retreat på Bekkjarvik Gjestgiveri, i en av Norges vakreste havner. Helgen kombinerer yoga, pilates og meditasjon med faglige workshops om kroppens sammenhenger og naturbaserte aktiviteter i rolige omgivelser.</p>
+        <p>Programmet inkluderer sauna, gode måltider basert på sesongens råvarer og sosiale samlinger. Helgen er lagt opp for å gi deltakerne både påfyll, bevegelse og tid til å lande i kroppen. Gjennom retreaten får deltakerne innsikt i hvordan kropp, stress og nervesystem henger sammen, samt praktiske erfaringer med regulering, restitusjon og tilstedeværelse.</p>
+      </div>
+      <div class="modal-block">
+        <h3>Hvem passer retreaten for</h3>
+        <p>Retreaten passer for deg som ønsker å prioritere egen helse og finne mer ro og balanse i kroppen. Helgen er for deg som er nysgjerrig på sammenhengen i kroppen og ønsker større forståelse for helhetlig helse. Retreaten kan også være spesielt relevant for deg som opplever helseplager eller lever med kroniske smerter. Ingen tidligere erfaring med yoga eller pilates er nødvendig.</p>
+      </div>
+      <div class="modal-block">
+        <h3>Program</h3>
+        <div class="program-grid">
+          <div class="program-day">
+            <h4>Fredag</h4>
+            <ul>
+              <li>Innsjekk på hotellet</li>
+              <li>Velkomst og introduksjon</li>
+              <li>Yoga</li>
+              <li>Felles middag</li>
+              <li>Sauna og avspenning</li>
+              <li>Kveldssamling med bål</li>
+            </ul>
+          </div>
+          <div class="program-day">
+            <h4>Lørdag</h4>
+            <ul>
+              <li>Morgenyoga</li>
+              <li>Frokost</li>
+              <li>Foredrag stressmestring</li>
+              <li>Lunsj</li>
+              <li>Skogsvandring og meditasjon</li>
+              <li>Felles middag</li>
+              <li>Sauna</li>
+              <li>Kveldssamling med bål</li>
+            </ul>
+          </div>
+          <div class="program-day">
+            <h4>Søndag</h4>
+            <ul>
+              <li>Morgenyoga</li>
+              <li>Frokost</li>
+              <li>Foredrag kvinnehelse</li>
+              <li>Workshop og refleksjon</li>
+              <li>Avsluttende samling</li>
+              <li>Utsjekk</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="modal-block">
+        <h3>Hva er inkludert</h3>
+        <ul class="modal-list">
+          <li>2 netter på Bekkjarvik Gjestgiveri, inkludert frokost</li>
+          <li>Middag fredag og lørdag</li>
+          <li>Lunsj lørdag</li>
+          <li>Yoga og pilates</li>
+          <li>2 faglige workshops</li>
+          <li>Guidede meditasjoner</li>
+          <li>Guidede sauna og aufguss ritualer</li>
+          <li>Naturbaserte aktiviteter</li>
+          <li>Et inspirerende og trygt fellesskap gjennom hele helgen</li>
+          <li>Frukt og nøtter gjennom oppholdet</li>
+        </ul>
+      </div>
+      <div class="modal-block">
+        <h3>Teamet du vil møte</h3>
+        <div class="modal-team-card">
+          <div class="modal-team-photo" style="background-image: url('images/susanne.jpg'); background-position: center 15%;"></div>
+          <div class="modal-team-info">
+            <h4>Susanne Nesse</h4>
+            <div class="modal-team-role">Yogalærer & mentaltrener</div>
+            <p>Susanne har et sterkt engasjement for helhetlig helse og et ønske om å formidle kunnskap som støtter kropp, sinn og indre balanse. Hun er sertifisert yogalærer innen Hatha og Yin (200 timer), har femårig utdanning innen helse og kosthold, og er utdannet mentaltrener.</p>
+            <p>I sine klasser skaper Susanne et trygt, mykt og inkluderende rom der alle er velkomne akkurat som de er. Hun tilpasser undervisningen til ulike nivåer og behov.</p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-block">
+        <h3>Pris</h3>
+        <div class="modal-pris">
+          <span class="modal-pris-amount">6 500</span>
+          <span class="modal-pris-label">NOK per person</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Balestrand -->
+  <div class="event-modal" id="modal-balestrand">
+    <button class="modal-close" onclick="closeModal('modal-balestrand')">✕</button>
+    <div class="modal-hero">
+      <div class="modal-hero-bg" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1400&q=80');"></div>
+      <div class="modal-hero-overlay"></div>
+      <div class="modal-hero-content">
+        <div class="modal-hero-eyebrow">Retreat · 22–25 oktober 2025</div>
+        <h1 class="modal-hero-title">Et pust<br>i Bale</h1>
+        <div class="modal-hero-sub">Balestrand Hotell, Sognefjorden · 5 000 NOK</div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-block">
+        <h3>Om retreaten</h3>
+        <p>22.–25. oktober inviterer aust til et tredagers retreat på Balestrand Hotell, omgitt av fjord, fjell og rolig natur. Helgen kombinerer yoga og meditasjon med faglige workshops om kroppens sammenhenger, samt naturbaserte aktiviteter i naturnære omgivelser.</p>
+        <p>Programmet inkluderer tid til hvile og restitusjon, gode måltider basert på sesongens råvarer og sosiale samlinger i et trygt og uformelt fellesskap. Retreaten er lagt opp for å gi deltakerne påfyll, bevegelse og rom til å lande i kroppen.</p>
+      </div>
+      <div class="modal-block">
+        <h3>Hvem passer retreaten for</h3>
+        <p>Retreaten passer for deg som ønsker å prioritere egen helse og finne mer ro og balanse. Helgen er for deg som er nysgjerrig på sammenhengen i kroppen og ønsker større forståelse for helhetlig helse. Retreaten kan også være spesielt relevant for deg som opplever helseplager eller lever med kroniske smerter, og som ønsker en trygg ramme for å utforske kropp og regulering i eget tempo. Ingen tidligere erfaring med yoga eller pilates er nødvendig.</p>
+      </div>
+      <div class="modal-block">
+        <h3>Program</h3>
+        <div class="program-grid">
+          <div class="program-day">
+            <h4>Torsdag</h4>
+            <ul>
+              <li>Innsjekk på hotellet</li>
+              <li>Velkomst og introduksjon</li>
+              <li>Yoga</li>
+              <li>Kveldssamling</li>
+            </ul>
+          </div>
+          <div class="program-day">
+            <h4>Fredag</h4>
+            <ul>
+              <li>Yoga</li>
+              <li>Felles frokost</li>
+              <li>Fjelltur og elvevandring</li>
+              <li>Sauna og avspenning</li>
+              <li>Middag</li>
+              <li>Kveldssamling med bål</li>
+            </ul>
+          </div>
+          <div class="program-day">
+            <h4>Lørdag</h4>
+            <ul>
+              <li>Morgenyoga</li>
+              <li>Frokost</li>
+              <li>Foredrag</li>
+              <li>Skogsvandring og meditasjon</li>
+              <li>Middag</li>
+              <li>Sauna</li>
+              <li>DJ-set med Madde og Thea</li>
+            </ul>
+          </div>
+          <div class="program-day">
+            <h4>Søndag</h4>
+            <ul>
+              <li>Morgenyoga</li>
+              <li>Frokost</li>
+              <li>Foredrag</li>
+              <li>Workshop og refleksjon</li>
+              <li>Avsluttende samling</li>
+              <li>Utsjekk</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="modal-block">
+        <h3>Hva er inkludert</h3>
+        <ul class="modal-list">
+          <li>3 netter på Balestrand Hotell, inkludert frokost</li>
+          <li>Kveldsmat ved ankomst</li>
+          <li>Middag fredag og lørdag</li>
+          <li>Yoga</li>
+          <li>Faglige workshops og foredrag</li>
+          <li>Guidede meditasjoner</li>
+          <li>Guidede sauna og aufguss ritualer</li>
+          <li>Naturbaserte aktiviteter</li>
+          <li>DJ-set</li>
+          <li>Et inspirerende og trygt fellesskap gjennom hele helgen</li>
+        </ul>
+      </div>
+      <div class="modal-block">
+        <h3>Teamet du vil møte</h3>
+        <div class="modal-team-card">
+          <div class="modal-team-photo" style="background-image: url('images/synnove.jpg'); background-position: center 30%;"></div>
+          <div class="modal-team-info">
+            <h4>Synnøve Saenger</h4>
+            <div class="modal-team-role">Yogalærer</div>
+            <p>Synnøve er yogalærer med mottoet «kom som du er». Hun har studert yoga i 11 år, tatt 700 timer yogalærerutdanning i Ecuador, Portugal, Mexico og Guatemala, og undervist i 7 år.</p>
+            <p>Hun tror at det er mennesket som skal være kilden til hvordan yogatimen går, og tilpasser alltid timene til behovene i gruppen. På retreaten tar Synnøve dere gjennom dynamisk Vinyasa, rolig Hatha og restorativ Yin.</p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-block">
+        <h3>Pris</h3>
+        <div class="modal-pris">
+          <span class="modal-pris-amount">5 000</span>
+          <span class="modal-pris-label">NOK per person</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       NAV
+  ══════════════════════════════════════ -->
   <nav id="nav">
     <a href="#" class="nav-logo">aust</a>
     <button class="hamburger" id="hamburger" aria-label="Åpne meny">
-      <span></span>
-      <span></span>
-      <span></span>
+      <span></span><span></span><span></span>
     </button>
     <ul class="nav-links" id="nav-links">
       <li><a href="#om">Om aust</a></li>
-      <li><a href="#events">Events</a></li>
+      <li class="nav-dropdown">
+        <a href="#events">Events</a>
+        <div class="nav-dropdown-menu">
+          <a href="#" onclick="openModal('modal-workshop'); return false;">Workshop</a>
+          <a href="#" onclick="openModal('modal-bekkjarvik'); return false;">Retreat Bekkjarvik</a>
+          <a href="#" onclick="openModal('modal-balestrand'); return false;">Retreat Balestrand</a>
+        </div>
+      </li>
       <li><a href="#kontakt">Kontakt</a></li>
     </ul>
   </nav>
 
-  <!-- HERO -->
+  <!-- ══════════════════════════════════════
+       HERO
+  ══════════════════════════════════════ -->
   <section class="hero">
     <video class="hero-video" autoplay muted loop playsinline
       poster="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=1200&q=60">
@@ -760,6 +854,7 @@
     </video>
     <div class="hero-overlay"></div>
     <div class="hero-content">
+      <div class="hero-eyebrow">Velkommen til</div>
       <div class="hero-wordmark">aust</div>
       <p class="hero-tagline">bevegelse &nbsp;·&nbsp; kunnskap &nbsp;·&nbsp; fellesskap</p>
     </div>
@@ -769,152 +864,114 @@
     </div>
   </section>
 
-  <!-- OM AUST -->
-  <div id="om" class="about">
-    <div class="about-inner">
-      <div class="about-text fade-in">
-        <div class="section-label">Om aust</div>
-        <h2>Forebyggende helse — en ny begynnelse</h2>
-        <p>
-          Aust er et nyetablert konsept innen forebyggende helsearbeid. Gjennom retreats,
-          arrangementer og samarbeid utvikler aust arenaer som kombinerer bevegelse,
-          kunnskapsformidling og fellesskap.
-        </p>
-        <p>
-          Målet er å gjøre kunnskap om kroppen mer tilgjengelig og samtidig skape trygge
-          rammer for læring, bevegelse og sosial tilhørighet.
-        </p>
-        <p class="navn-note">
-          Navnet «aust» refererer til Austevoll, til retning og ny begynnelse — og til østlige
-          tradisjoner der yoga har sitt historiske opphav. Lokal forankring møter global kunnskapstradisjon.
-        </p>
-      </div>
-      <div class="about-image fade-in"></div>
-    </div>
-  </div>
+  <!-- ══════════════════════════════════════
+       OM AUST
+  ══════════════════════════════════════ -->
+  <section class="om-section" id="om">
+    <div class="om-inner">
 
-  <!-- VISJON -->
-  <section class="visjon">
-    <blockquote class="fade-in">
-      «Å etablere bærekraftige og tilgjengelige møteplasser for helsefremmende arbeid —
-      med særlig vekt på å styrke helhetlig helse, mestring og tilhørighet.»
-      <cite>Visjon, aust</cite>
-    </blockquote>
+      <!-- Om + pillars -->
+      <div class="om-intro fade-in">
+        <div class="om-text">
+          <div class="section-label">Om aust</div>
+          <h2>Helhetlig helse på norsk grunn</h2>
+          <p>Aust er et nytt konsept som tar utgangspunkt i helhetlig og forebyggende helse. Gjennom retreats, arrangementer og samarbeid utvikler aust møteplasser som kombinerer bevegelse, kunnskap og fellesskap.</p>
+          <p>Målet er å gjøre kunnskap om kroppen mer tilgjengelig og skape trygge rammer for læring, bevegelse og sosial tilhørighet.</p>
+          <p class="navn-note">Navnet «aust» refererer til Austevoll, til retning og ny begynnelse, og til østlige tradisjoner der yoga har sitt historiske opphav. Lokal forankring møter global kunnskapstradisjon.</p>
+        </div>
+        <div class="om-pillars">
+          <div class="pillar">
+            <div class="section-label" style="margin-bottom: 12px;">Hva vi gjør</div>
+            <div class="pillar-title">Retreats</div>
+            <div class="pillar-desc">Flerdagers opphold i vakre norske naturomgivelser</div>
+          </div>
+          <div class="pillar">
+            <div class="pillar-title">Workshops</div>
+            <div class="pillar-desc">Faglige arrangementer med eksperter og personlige historier</div>
+          </div>
+          <div class="pillar">
+            <div class="pillar-title">Fellesskap</div>
+            <div class="pillar-desc">Trygge møteplasser for bevegelse, kunnskap og tilhørighet</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Visjon -->
+      <div class="visjon-block fade-in">
+        <div class="section-label light centered">Visjon</div>
+        <blockquote>«Å skape bærekraftige og tilgjengelige møteplasser som fremmer helhetlig helse, mestring og tilhørighet, og gjøre kunnskap om kroppen mer tilgjengelig.»</blockquote>
+        <cite>Aust, 2025</cite>
+      </div>
+
+      <!-- Grunnlegger -->
+      <div class="grunnlegger fade-in">
+        <div class="grunnlegger-photo"></div>
+        <div class="grunnlegger-text">
+          <div class="section-label">Grunnlegger</div>
+          <h3>Thea Misje Heggland</h3>
+          <p>Thea Misje Heggland står bak konseptet og utviklingen av aust. Gjennom egen erfaring med helseutfordringer over flere år har hun opparbeidet seg en dypere forståelse for kroppen.</p>
+          <p>Denne erfaringen har gitt henne et sterkt engasjement for å gjøre kunnskap om helhetlig helse mer tilgjengelig. Hun utforsker det som skaper reell endring, og ønsker å dele dette videre med en intensjon om å formidle håp og inspirasjon til andre som ønsker å forstå egen kropp bedre.</p>
+          <p>Med aust ønsker Thea å skape møteplasser der mennesker kan samles gjennom bevegelse, kunnskap og fellesskap.</p>
+        </div>
+      </div>
+
+    </div>
   </section>
 
-  <!-- EVENTS -->
+  <!-- ══════════════════════════════════════
+       EVENTS
+  ══════════════════════════════════════ -->
   <section class="events-section" id="events">
     <div class="events-header fade-in">
-      <div class="section-label">Kommende</div>
+      <div class="section-label light">Kommende</div>
       <h2>Events</h2>
     </div>
-
     <div class="events-grid">
 
-      <div class="event-card fade-in">
-        <div class="event-image" style="background-image: url('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80');">
-          <span class="event-badge">Workshop</span>
-        </div>
-        <div class="event-body">
-          <div class="event-date">August 2025</div>
-          <h3 class="event-title">Workshop — Endometriose & adenomyose</h3>
-          <div class="event-location">Litteraturhuset, Bergen</div>
-          <p class="event-desc">
-            En faglig kveld med fokus på forståelse av kroppen, hormoner og nervesystem.
-            Fagpersoner og erfaringsstemmer deler kunnskap og konkrete verktøy.
-          </p>
-          <div class="event-footer">
-            <div class="event-price">250<small>NOK</small></div>
-            <a href="#" class="btn-link">Les mer</a>
-          </div>
+      <div class="event-card fade-in" onclick="openModal('modal-workshop')">
+        <div class="event-card-bg" style="background-image: url('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80');"></div>
+        <div class="event-card-overlay"></div>
+        <div class="event-card-content">
+          <div class="event-card-badge">Workshop · August 2025</div>
+          <div class="event-card-title">Endometriose & adenomyose</div>
+          <div class="event-card-meta">Litteraturhuset, Bergen<br>250 NOK</div>
+          <div class="event-card-cta">Utforsk</div>
         </div>
       </div>
 
-      <div class="event-card fade-in">
-        <div class="event-image" style="background-image: url('https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=800&q=80');">
-          <span class="event-badge">Retreat</span>
-        </div>
-        <div class="event-body">
-          <div class="event-date">25–27 september 2025</div>
-          <h3 class="event-title">Retreat Bekkjarvik</h3>
-          <div class="event-location">Bekkjarvik Gjestgiveri, Austevoll</div>
-          <p class="event-desc">
-            Et tredagers retreat som kombinerer yoga, pilates og meditasjon med faglige
-            workshops, sauna og naturbaserte aktiviteter i en av Norges vakreste havner.
-          </p>
-          <div class="event-footer">
-            <div class="event-price">Pris på forespørsel</div>
-            <a href="#" class="btn-link">Les mer</a>
-          </div>
+      <div class="event-card fade-in" onclick="openModal('modal-bekkjarvik')">
+        <div class="event-card-bg" style="background-image: url('https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=800&q=80');"></div>
+        <div class="event-card-overlay"></div>
+        <div class="event-card-content">
+          <div class="event-card-badge">Retreat · 25–27 sep 2025</div>
+          <div class="event-card-title">Mellom hav og ro</div>
+          <div class="event-card-meta">Bekkjarvik Gjestgiveri, Austevoll<br>6 500 NOK</div>
+          <div class="event-card-cta">Utforsk</div>
         </div>
       </div>
 
-      <div class="event-card fade-in">
-        <div class="event-image" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=800&q=80');">
-          <span class="event-badge">Retreat</span>
-        </div>
-        <div class="event-body">
-          <div class="event-date">22–25 oktober 2025</div>
-          <h3 class="event-title">Retreat Balestrand</h3>
-          <div class="event-location">Balestrand Hotell, Sognefjorden</div>
-          <p class="event-desc">
-            Fire dager omgitt av fjord, fjell og rolig natur. Yoga, meditasjon, faglige
-            workshops og tid til hvile og restitusjon i trygge og vakre omgivelser.
-          </p>
-          <div class="event-footer">
-            <div class="event-price">Pris på forespørsel</div>
-            <a href="#" class="btn-link">Les mer</a>
-          </div>
+      <div class="event-card fade-in" onclick="openModal('modal-balestrand')">
+        <div class="event-card-bg" style="background-image: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=800&q=80');"></div>
+        <div class="event-card-overlay"></div>
+        <div class="event-card-content">
+          <div class="event-card-badge">Retreat · 22–25 okt 2025</div>
+          <div class="event-card-title">Et pust i Bale</div>
+          <div class="event-card-meta">Balestrand Hotell, Sognefjorden<br>5 000 NOK</div>
+          <div class="event-card-cta">Utforsk</div>
         </div>
       </div>
 
     </div>
   </section>
 
-  <!-- TEAM -->
-  <section class="team-section">
-    <div class="team-inner">
-      <div class="section-label fade-in">Teamet</div>
-      <h2 class="fade-in">Menneskene bak aust</h2>
-      <div class="team-grid">
-
-        <div class="team-card fade-in">
-          <div class="team-photo" style="background-image: url('images/thea.jpg'); background-position: center 20%;"></div>
-          <div class="team-info">
-            <h3>Thea Misje Heggland</h3>
-            <div class="team-role">Grunnlegger</div>
-            <p>Gjennom egen erfaring med langvarige helseutfordringer har Thea fått en dyp interesse for sammenhengen mellom kropp, stress og nervesystem — og et sterkt engasjement for å gjøre kunnskap om helhetlig helse tilgjengelig for flere.</p>
-          </div>
-        </div>
-
-        <div class="team-card fade-in">
-          <div class="team-photo" style="background-image: url('images/susanne.jpg'); background-position: center 15%;"></div>
-          <div class="team-info">
-            <h3>Susanne Nesse</h3>
-            <div class="team-role">Yogalærer & mentaltrener</div>
-            <p>Sertifisert yogalærer innen Hatha og Yin (200h), 5-årig utdanning innen helse og kosthold. Susanne skaper rom der alle er velkomne akkurat som de er — og møter hver deltaker der de er.</p>
-          </div>
-        </div>
-
-        <div class="team-card fade-in">
-          <div class="team-photo" style="background-image: url('images/synnove.jpg'); background-position: center 30%;"></div>
-          <div class="team-info">
-            <h3>Synnøve Saenger</h3>
-            <div class="team-role">Yogalærer — Retreat Balestrand</div>
-            <p>700 timer yogalærerutdanning fra Ecuador, Portugal, Mexico og Guatemala. Synnøve tilpasser alltid timene til gruppen, og bringer det beste fra Vinyasa, Hatha og Yin til retreaten.</p>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- KONTAKT -->
+  <!-- ══════════════════════════════════════
+       KONTAKT
+  ══════════════════════════════════════ -->
   <section class="kontakt" id="kontakt">
     <div class="kontakt-inner">
       <div class="kontakt-left">
-        <div class="logo-footer">aust</div>
-        <p>Vi vil gjerne høre fra deg — enten du har spørsmål om et arrangement, ønsker å samarbeide, eller bare vil vite mer om hva aust er.</p>
+        <div class="kontakt-wordmark">aust</div>
+        <p>Vi vil gjerne høre fra deg, enten du har spørsmål om et arrangement, ønsker å samarbeide, eller bare vil vite mer om hva aust er.</p>
       </div>
       <div class="kontakt-right">
         <h3>Ta kontakt</h3>
@@ -928,30 +985,34 @@
         </div>
       </div>
     </div>
-    <div class="footer-bottom">
-      <span>© 2025 aust — Alle rettigheter forbeholdes</span>
-      <span>Nettside av Rammeverket</span>
-    </div>
   </section>
 
+  <!-- ══════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════ -->
+  <footer>
+    <div class="footer-inner">
+      <span>© 2025 aust — bevegelse · kunnskap · fellesskap</span>
+      <span>Nettside av Rammeverket</span>
+    </div>
+  </footer>
+
   <script>
-    // Nav scroll + menu-open state
+    // Nav scroll
     const nav = document.getElementById('nav');
     window.addEventListener('scroll', () => {
       nav.classList.toggle('scrolled', window.scrollY > 60);
     });
 
-    // Hamburger toggle
+    // Hamburger
     const hamburger = document.getElementById('hamburger');
     const navLinks = document.getElementById('nav-links');
-
     hamburger.addEventListener('click', () => {
-      const isOpen = navLinks.classList.toggle('open');
-      hamburger.classList.toggle('open', isOpen);
-      nav.classList.toggle('menu-open', isOpen);
-      document.body.style.overflow = isOpen ? 'hidden' : '';
+      const open = navLinks.classList.toggle('open');
+      hamburger.classList.toggle('open', open);
+      nav.classList.toggle('menu-open', open);
+      document.body.style.overflow = open ? 'hidden' : '';
     });
-
     navLinks.querySelectorAll('a').forEach(a => {
       a.addEventListener('click', () => {
         navLinks.classList.remove('open');
@@ -961,31 +1022,36 @@
       });
     });
 
-    // Scroll fade-in
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          setTimeout(() => entry.target.classList.add('visible'), 80);
-          observer.unobserve(entry.target);
+    // Modals
+    function openModal(id) {
+      const m = document.getElementById(id);
+      m.classList.add('open');
+      m.scrollTop = 0;
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.event-modal.open').forEach(m => {
+          m.classList.remove('open');
+          document.body.style.overflow = '';
+        });
+      }
+    });
+
+    // Fade-in on scroll
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), 80);
+          obs.unobserve(e.target);
         }
       });
-    }, { threshold: 0.12 });
-
-    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
-    // Staggered cards
-    document.querySelectorAll('.event-card.fade-in, .team-card.fade-in').forEach((el, i) => {
-      observer.unobserve(el);
-      const cardObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            setTimeout(() => entry.target.classList.add('visible'), i * 100);
-            cardObserver.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.1 });
-      cardObserver.observe(el);
-    });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
   </script>
 </body>
 </html>
