@@ -37,7 +37,7 @@
       position: fixed; bottom: 20px; left: 20px;
       background: var(--brown-dark); color: rgba(255,255,255,0.5);
       font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase;
-      padding: 5px 10px; border-radius: 2px; z-index: 9999; pointer-events: none;
+      padding: 5px 10px; border-radius: 2px; z-index: 90; pointer-events: none;
     }
 
     /* ─── NAV ─── */
@@ -536,37 +536,76 @@
     }
 
     /* ─── KONTAKT ─── */
-    .kontakt { background: var(--brown-dark); padding: 120px 48px; }
+    .kontakt { background: var(--brown-dark); padding: 0; }
+
+    /* Top: big CTA band */
+    .kontakt-cta-band {
+      padding: 100px 48px; border-bottom: 1px solid rgba(242,237,229,0.07);
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .kontakt-cta-band::before {
+      content: '?'; position: absolute;
+      font-family: 'Montserrat', sans-serif; font-weight: 900;
+      font-size: 560px; line-height: 1; color: rgba(255,255,255,0.025);
+      top: 50%; left: 50%; transform: translate(-50%, -50%);
+      pointer-events: none; user-select: none;
+    }
+    .kontakt-cta-band .section-label { position: relative; }
+    .kontakt-cta-eyebrow {
+      font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 10px;
+      letter-spacing: 0.3em; text-transform: uppercase; color: var(--sage-light);
+      display: flex; align-items: center; gap: 14px; margin-bottom: 28px;
+    }
+    .kontakt-cta-eyebrow::after {
+      content: ''; display: block; width: 36px; height: 1px; background: var(--sage-light);
+    }
+    .kontakt-cta-headline {
+      font-family: 'Montserrat', sans-serif; font-weight: 800;
+      font-size: clamp(36px, 7vw, 88px); color: var(--cream);
+      letter-spacing: -0.03em; line-height: 1.0; margin-bottom: 20px;
+      position: relative;
+    }
+    .kontakt-cta-sub {
+      font-size: 16px; color: rgba(242,237,229,0.45); font-weight: 300;
+      max-width: 480px; line-height: 1.7; margin-bottom: 48px; position: relative;
+    }
+    .kontakt-open-btn {
+      display: inline-flex; align-items: center; gap: 14px;
+      background: var(--bg); color: var(--text-dark);
+      font-family: 'Montserrat', sans-serif; font-weight: 800;
+      font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+      padding: 18px 36px; border: none; border-radius: 2px; cursor: pointer;
+      text-decoration: none; transition: background 0.25s, gap 0.25s;
+      position: relative;
+    }
+    .kontakt-open-btn:hover { background: var(--cream); gap: 20px; }
+    .kontakt-open-btn::after { content: '→'; font-size: 16px; }
+
+    /* Bottom: details strip */
     .kontakt-inner {
       max-width: 1100px; margin: 0 auto;
-      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0;
+      padding: 64px 48px;
     }
-    .kontakt-wordmark {
-      font-family: 'Montserrat', sans-serif; font-weight: 800;
-      font-size: clamp(64px, 12vw, 140px); line-height: 0.9;
-      letter-spacing: -0.02em; color: rgba(242,237,229,0.06);
-      margin-bottom: 28px;
+    .kontakt-detail-block {
+      padding: 0 48px; border-right: 1px solid rgba(242,237,229,0.08);
     }
-    .kontakt-left p {
-      font-size: 15px; line-height: 1.8; color: rgba(242,237,229,0.48); max-width: 360px;
-    }
-    .kontakt-right h3 {
-      font-family: 'Montserrat', sans-serif; font-weight: 800;
-      font-size: clamp(28px, 4vw, 48px); color: var(--cream);
-      margin-bottom: 40px; letter-spacing: -0.02em; line-height: 1.1;
-    }
-    .kontakt-detail { margin-bottom: 28px; }
-    .kontakt-detail label {
+    .kontakt-detail-block:first-child { padding-left: 0; }
+    .kontakt-detail-block:last-child { border-right: none; }
+    .kontakt-detail-block label {
       display: block; font-family: 'Montserrat', sans-serif; font-weight: 700;
       font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase;
-      color: var(--sage-light); margin-bottom: 8px;
+      color: var(--sage-light); margin-bottom: 10px;
     }
-    .kontakt-detail a {
+    .kontakt-detail-block a, .kontakt-detail-block p {
       font-family: 'Montserrat', sans-serif; font-weight: 700;
-      font-size: clamp(18px, 2.5vw, 26px); color: var(--cream);
+      font-size: clamp(14px, 1.8vw, 20px); color: var(--cream);
       text-decoration: none; letter-spacing: -0.01em; transition: color 0.2s;
+      font-weight: 600; line-height: 1.4;
     }
-    .kontakt-detail a:hover { color: var(--sage-light); }
+    .kontakt-detail-block a:hover { color: var(--sage-light); }
+    .kontakt-detail-block p { font-weight: 300; font-size: 14px; color: rgba(242,237,229,0.45); }
 
     /* ─── FOOTER ─── */
     footer {
@@ -820,12 +859,156 @@
       .booking-modal .modal-header { padding: 12px 20px; }
       .booking-modal .modal-cta-bar { padding: 14px 20px; flex-direction: column; gap: 12px; }
       .booking-modal .modal-cta-btn { justify-content: center; }
+      /* Kontakt mobile */
+      .kontakt-cta-band { padding: 72px 20px; }
+      .kontakt-inner { grid-template-columns: 1fr; gap: 36px; padding: 48px 20px; }
+      .kontakt-detail-block { padding: 0; border-right: none; border-bottom: 1px solid rgba(242,237,229,0.08); padding-bottom: 28px; }
+      .kontakt-detail-block:last-child { border-bottom: none; padding-bottom: 0; }
+    }
+
+    /* ─── CONTACT MODAL ─── */
+    .contact-modal {
+      position: fixed; inset: 0; background: var(--bg); z-index: 600;
+      overflow: hidden; transform: translateY(100%);
+      transition: transform 0.55s cubic-bezier(0.32, 0.72, 0, 1);
+      will-change: transform; display: flex; flex-direction: column;
+    }
+    .contact-modal.open { transform: translateY(0); }
+
+    .contact-hero-band {
+      background: var(--forest); padding: 56px 64px 48px;
+      flex-shrink: 0; position: relative; overflow: hidden;
+    }
+    .contact-hero-band::before {
+      content: '→'; position: absolute; right: 40px; bottom: -40px;
+      font-size: 260px; font-weight: 900; color: rgba(255,255,255,0.04);
+      font-family: 'Montserrat', sans-serif; line-height: 1; pointer-events: none;
+    }
+    .contact-hero-band .modal-header {
+      position: static; background: none; border: none; backdrop-filter: none;
+      padding: 0; margin-bottom: 36px;
+    }
+    .contact-hero-band .modal-back-btn { color: rgba(242,237,229,0.55); }
+    .contact-hero-band .modal-back-btn:hover { color: var(--cream); }
+    .contact-hero-band .modal-header-label { color: var(--sage-light); }
+    .contact-title {
+      font-family: 'Montserrat', sans-serif; font-weight: 800;
+      font-size: clamp(32px, 6vw, 72px); color: var(--cream);
+      letter-spacing: -0.03em; line-height: 1.0; position: relative;
+    }
+    .contact-sub {
+      margin-top: 12px; font-size: 15px; color: rgba(242,237,229,0.45);
+      font-weight: 300; max-width: 480px; line-height: 1.7; position: relative;
+    }
+
+    .contact-scroll-area { flex: 1; overflow-y: auto; }
+    .contact-body { max-width: 680px; margin: 0 auto; padding: 56px 48px 32px; }
+
+    .topic-pills {
+      display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 40px;
+    }
+    .topic-pill {
+      font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 10px;
+      letter-spacing: 0.18em; text-transform: uppercase;
+      padding: 10px 18px; border: 1.5px solid var(--border); border-radius: 100px;
+      cursor: pointer; background: transparent; color: var(--text-mid);
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .topic-pill:hover, .topic-pill.active {
+      background: var(--forest); border-color: var(--forest); color: var(--cream);
+    }
+
+    /* Confirmation for contact */
+    .contact-confirm {
+      display: none; flex-direction: column; align-items: center; justify-content: center;
+      flex: 1; padding: 60px 48px; text-align: center;
+    }
+    .contact-confirm.visible { display: flex; }
+    .contact-confirm .booking-confirm-icon { background: var(--forest); }
+    .contact-confirm h3 {
+      font-family: 'Montserrat', sans-serif; font-weight: 800;
+      font-size: clamp(24px, 4vw, 40px); color: var(--text-dark);
+      letter-spacing: -0.02em; margin-bottom: 16px;
+    }
+    .contact-confirm p { font-size: 16px; line-height: 1.8; color: var(--text-mid); font-weight: 300; max-width: 440px; }
+    .contact-confirm button {
+      margin-top: 36px; display: inline-flex; align-items: center; gap: 10px;
+      background: var(--forest); color: var(--cream);
+      font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 10px;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      padding: 14px 28px; border: none; border-radius: 2px; cursor: pointer;
+      transition: background 0.2s;
+    }
+    .contact-confirm button:hover { background: var(--forest-mid); }
+
+    @media (max-width: 680px) {
+      .contact-hero-band { padding: 36px 20px 32px; }
+      .contact-body { padding: 40px 20px 24px; }
+      .contact-modal .modal-cta-bar { padding: 14px 20px; flex-direction: column; gap: 12px; }
+      .contact-modal .modal-cta-btn { justify-content: center; }
     }
   </style>
 </head>
 <body>
 
   <div class="mockup-label">Rammeverket for aust</div>
+
+  <!-- ══════════════════════════════════════
+       CONTACT MODAL
+  ══════════════════════════════════════ -->
+  <div class="contact-modal" id="contact-modal">
+    <div class="contact-hero-band">
+      <div class="modal-header">
+        <button class="modal-back-btn" onclick="closeContactModal()">
+          <span class="back-arrow">←</span> Tilbake til aust
+        </button>
+        <span class="modal-header-label">Kontakt oss</span>
+      </div>
+      <div class="contact-title">Har du<br>spørsmål?</div>
+      <div class="contact-sub">Vi svarer vanligvis innen en arbeidsdag. Ikke nøl med å ta kontakt.</div>
+    </div>
+
+    <!-- Form view -->
+    <div class="contact-scroll-area" id="contact-form-view">
+      <div class="contact-body">
+        <div class="topic-pills" id="topic-pills">
+          <button class="topic-pill active" data-topic="Spørsmål om event" onclick="selectTopic(this)">Spørsmål om event</button>
+          <button class="topic-pill" data-topic="Samarbeid" onclick="selectTopic(this)">Samarbeid</button>
+          <button class="topic-pill" data-topic="Presse" onclick="selectTopic(this)">Presse</button>
+          <button class="topic-pill" data-topic="Annet" onclick="selectTopic(this)">Annet</button>
+        </div>
+        <form class="booking-form" id="contact-form" onsubmit="submitContact(event)" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="c-navn">Navn *</label>
+              <input type="text" id="c-navn" name="navn" required placeholder="Ditt navn">
+            </div>
+            <div class="form-group">
+              <label for="c-epost">E-post *</label>
+              <input type="email" id="c-epost" name="epost" required placeholder="din@epost.no">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="c-melding">Melding *</label>
+            <textarea id="c-melding" name="melding" required placeholder="Skriv meldingen din her..." style="min-height: 140px;"></textarea>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Confirmation -->
+    <div class="contact-confirm" id="contact-confirm-view">
+      <div class="booking-confirm-icon">✓</div>
+      <h3>Melding sendt!</h3>
+      <p id="contact-confirm-text">Takk for at du tok kontakt. Vi svarer deg på e-post innen en arbeidsdag.</p>
+      <button onclick="closeContactModal()">← Tilbake til aust</button>
+    </div>
+
+    <div class="modal-cta-bar" id="contact-cta-bar">
+      <div class="modal-cta-info">Vi svarer innen <strong>24 timer</strong></div>
+      <button class="modal-cta-btn" onclick="document.getElementById('contact-form').dispatchEvent(new Event('submit', {cancelable:true, bubbles:true}))">Send melding</button>
+    </div>
+  </div>
 
   <!-- ══════════════════════════════════════
        BOOKING MODAL
@@ -1387,23 +1570,31 @@
        KONTAKT
   ══════════════════════════════════════ -->
   <section class="kontakt" id="kontakt">
+
+    <!-- Big CTA band -->
+    <div class="kontakt-cta-band fade-in">
+      <div class="kontakt-cta-eyebrow">Kontakt oss</div>
+      <h2 class="kontakt-cta-headline">Har du<br>spørsmål?</h2>
+      <p class="kontakt-cta-sub">Enten du lurer på et arrangement, ønsker å samarbeide, eller bare vil vite mer om aust — vi vil gjerne høre fra deg.</p>
+      <button class="kontakt-open-btn" onclick="openContactModal()">Send oss en melding</button>
+    </div>
+
+    <!-- Details strip -->
     <div class="kontakt-inner">
-      <div class="kontakt-left">
-        <div class="kontakt-wordmark">aust</div>
-        <p>Vi vil gjerne høre fra deg, enten du har spørsmål om et arrangement, ønsker å samarbeide, eller bare vil vite mer om hva aust er.</p>
+      <div class="kontakt-detail-block">
+        <label>E-post</label>
+        <a href="mailto:post@austcommunity.no">post@austcommunity.no</a>
       </div>
-      <div class="kontakt-right">
-        <h3>Ta kontakt</h3>
-        <div class="kontakt-detail">
-          <label>E-post</label>
-          <a href="mailto:post@austcommunity.no">post@austcommunity.no</a>
-        </div>
-        <div class="kontakt-detail">
-          <label>Telefon</label>
-          <a href="tel:+4746744720">+47 467 44 720</a>
-        </div>
+      <div class="kontakt-detail-block">
+        <label>Telefon</label>
+        <a href="tel:+4746744720">+47 467 44 720</a>
+      </div>
+      <div class="kontakt-detail-block">
+        <label>Følg oss</label>
+        <a href="https://instagram.com/aust.community" target="_blank" rel="noopener">@aust.community</a>
       </div>
     </div>
+
   </section>
 
   <!-- ══════════════════════════════════════
@@ -1664,10 +1855,62 @@
 
     // Close booking on Escape
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && document.getElementById('booking-modal').classList.contains('open')) {
-        closeBookingModal();
+      if (e.key === 'Escape') {
+        if (document.getElementById('booking-modal').classList.contains('open')) closeBookingModal();
+        if (document.getElementById('contact-modal').classList.contains('open')) closeContactModal();
       }
     });
+
+    // ─── Contact modal ───
+    let selectedTopic = 'Spørsmål om event';
+
+    function selectTopic(btn) {
+      document.querySelectorAll('.topic-pill').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      selectedTopic = btn.dataset.topic;
+    }
+
+    function openContactModal() {
+      document.getElementById('contact-form').reset();
+      document.getElementById('contact-form-view').style.display = '';
+      document.getElementById('contact-confirm-view').classList.remove('visible');
+      document.getElementById('contact-cta-bar').style.display = '';
+      document.querySelectorAll('.topic-pill').forEach((p, i) => p.classList.toggle('active', i === 0));
+      selectedTopic = 'Spørsmål om event';
+      document.getElementById('contact-modal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeContactModal() {
+      document.getElementById('contact-modal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function submitContact(e) {
+      e.preventDefault();
+      const navn = document.getElementById('c-navn').value.trim();
+      const epost = document.getElementById('c-epost').value.trim();
+      const melding = document.getElementById('c-melding').value.trim();
+      if (!navn || !epost || !melding) {
+        (document.getElementById('c-navn').value ? document.getElementById('c-epost') : document.getElementById('c-navn')).focus();
+        return;
+      }
+      const body = [
+        'Emne: ' + selectedTopic,
+        'Navn: ' + navn,
+        'E-post: ' + epost,
+        '',
+        melding
+      ].join('\n');
+      window.location.href = 'mailto:post@austcommunity.no'
+        + '?subject=' + encodeURIComponent('Kontaktskjema – ' + selectedTopic)
+        + '&body=' + encodeURIComponent(body);
+      document.getElementById('contact-form-view').style.display = 'none';
+      document.getElementById('contact-cta-bar').style.display = 'none';
+      document.getElementById('contact-confirm-text').textContent =
+        'Takk, ' + navn.split(' ')[0] + '! Vi har mottatt meldingen din og svarer deg på ' + epost + ' innen en arbeidsdag.';
+      document.getElementById('contact-confirm-view').classList.add('visible');
+    }
   </script>
 </body>
 </html>
