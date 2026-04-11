@@ -1817,7 +1817,7 @@
       }
     });
 
-    function submitBooking(e) {
+    async function submitBooking(e) {
       e.preventDefault();
       const navn = document.getElementById('b-navn').value.trim();
       const epost = document.getElementById('b-epost').value.trim();
@@ -1829,20 +1829,32 @@
         return;
       }
 
-      // Build mailto
-      const body = [
-        'Arrangement: ' + currentEvent.title,
-        'Navn: ' + navn,
-        'E-post: ' + epost,
-        'Telefon: ' + (telefon || '–'),
-        'Antall plasser: ' + bookingQty,
-        'Total: ' + formatPrice(currentEvent.price * bookingQty),
-        kommentar ? '\nKommentar:\n' + kommentar : ''
-      ].join('\n');
+      const btn = document.querySelector('#booking-cta-bar .modal-cta-btn');
+      btn.disabled = true;
+      btn.textContent = 'Sender…';
 
-      window.location.href = 'mailto:post@austcommunity.no'
-        + '?subject=' + encodeURIComponent(currentEvent.emailSubject)
-        + '&body=' + encodeURIComponent(body);
+      try {
+        const res = await fetch('/api/booking', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            navn,
+            epost,
+            telefon,
+            kommentar,
+            arrangement: currentEvent.title,
+            antall: bookingQty,
+            total: formatPrice(currentEvent.price * bookingQty),
+            subject: currentEvent.emailSubject
+          })
+        });
+        if (!res.ok) throw new Error('server error');
+      } catch (err) {
+        btn.disabled = false;
+        btn.textContent = 'Send bestilling';
+        alert('Noe gikk galt. Prøv igjen eller send e-post direkte til post@austcommunity.no');
+        return;
+      }
 
       // Show confirmation
       document.getElementById('booking-form-view').style.display = 'none';
@@ -1886,7 +1898,7 @@
       document.body.style.overflow = '';
     }
 
-    function submitContact(e) {
+    async function submitContact(e) {
       e.preventDefault();
       const navn = document.getElementById('c-navn').value.trim();
       const epost = document.getElementById('c-epost').value.trim();
@@ -1895,16 +1907,25 @@
         (document.getElementById('c-navn').value ? document.getElementById('c-epost') : document.getElementById('c-navn')).focus();
         return;
       }
-      const body = [
-        'Emne: ' + selectedTopic,
-        'Navn: ' + navn,
-        'E-post: ' + epost,
-        '',
-        melding
-      ].join('\n');
-      window.location.href = 'mailto:post@austcommunity.no'
-        + '?subject=' + encodeURIComponent('Kontaktskjema – ' + selectedTopic)
-        + '&body=' + encodeURIComponent(body);
+
+      const btn = document.querySelector('#contact-cta-bar .modal-cta-btn');
+      btn.disabled = true;
+      btn.textContent = 'Sender…';
+
+      try {
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ navn, epost, melding, topic: selectedTopic })
+        });
+        if (!res.ok) throw new Error('server error');
+      } catch (err) {
+        btn.disabled = false;
+        btn.textContent = 'Send melding';
+        alert('Noe gikk galt. Prøv igjen eller send e-post direkte til post@austcommunity.no');
+        return;
+      }
+
       document.getElementById('contact-form-view').style.display = 'none';
       document.getElementById('contact-cta-bar').style.display = 'none';
       document.getElementById('contact-confirm-text').textContent =
