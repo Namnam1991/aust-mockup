@@ -157,17 +157,12 @@
     .hero-wordmark {
       font-family: var(--font-ui); font-weight: 900;
       font-size: clamp(88px, 18vw, 240px);
-      letter-spacing: 0.16em; color: var(--bg); line-height: 1;
-      text-indent: 0.16em;
+      letter-spacing: 0.03em; color: var(--bg); line-height: 1;
+      text-indent: 0.03em;
       opacity: 0; transform: translateY(20px);
       animation: fadeUp 1.4s cubic-bezier(0.25,0.46,0.45,0.94) 0.4s forwards;
     }
-    .hero-tagline {
-      font-family: var(--font-ui); font-weight: 300;
-      font-size: clamp(9px, 2vw, 11px); letter-spacing: 0.38em;
-      text-transform: uppercase; color: rgba(240,235,226,0.42);
-      opacity: 0; animation: fadeUp 1s ease 1s forwards;
-    }
+    .hero-tagline { display: none; }
     .hero-scroll {
       position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
       z-index: 3; display: flex; flex-direction: column; align-items: center; gap: 8px;
@@ -222,27 +217,9 @@
     .section-label.light::after { background: var(--sage-light); }
     .section-label.centered { justify-content: center; }
 
-    /* ─── BRAND MOMENT (logo image) ─── */
-    .brand-moment {
-      width: 100%; height: 70vh; min-height: 400px;
-      overflow: hidden; position: relative;
-    }
-    .brand-moment img {
-      width: 100%; height: 100%;
-      object-fit: cover; object-position: center 58%;
-      display: block;
-    }
-    .brand-moment-overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(to bottom,
-        rgba(15,20,10,0.08) 0%,
-        rgba(15,20,10,0.05) 60%,
-        rgba(240,235,226,0.55) 100%);
-    }
-
     /* ─── OM AUST ─── */
-    .om-section { background: var(--bg); padding-bottom: 120px; }
-    .om-inner { max-width: 1100px; margin: 0 auto; padding: 80px 48px 0; }
+    .om-section { background: var(--bg); padding: 120px 0; }
+    .om-inner { max-width: 1100px; margin: 0 auto; padding: 0 48px; }
 
     .om-intro {
       display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
@@ -353,7 +330,7 @@
       display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
     }
     .event-card {
-      position: relative; aspect-ratio: 2/3;
+      position: relative; aspect-ratio: 3/4;
       overflow: hidden; cursor: pointer; background: #1e2a16;
     }
     .event-card-bg {
@@ -685,19 +662,18 @@
     @media (max-width: 960px) {
       nav { padding: 22px 32px; }
       nav.scrolled { padding: 15px 32px; }
-      .om-section { padding-bottom: 80px; }
-      .om-inner { padding: 64px 32px 0; }
+      .om-section { padding: 80px 0; }
+      .om-inner { padding: 0 32px; }
       .events-section { padding: 80px 32px; }
       footer { padding: 24px 32px; }
       .om-intro { grid-template-columns: 1fr; gap: 48px; }
       .grunnlegger { grid-template-columns: 240px 1fr; gap: 48px; }
       .events-grid { grid-template-columns: 1fr 1fr; }
-      .event-card { aspect-ratio: 3/4; }
+      .event-card { aspect-ratio: 1/1; }
       .program-grid { grid-template-columns: 1fr; }
       .modal-body { padding: 60px 36px 60px; }
       .modal-hero-content { padding: 0 36px; }
       .visjon-block { padding: 72px 32px; margin: 0 -32px 72px; }
-      .brand-moment { height: 55vh; }
     }
 
     /* ─── MOBILE ─── */
@@ -732,11 +708,9 @@
       .nav-dropdown-menu a:hover { padding-left: 0 !important; background: none; }
       .chevron { display: none; }
 
-      .om-inner { padding: 48px 20px 0; }
+      .om-inner { padding: 0 20px; }
       .events-section { padding: 64px 20px; }
       footer { padding: 20px 20px; }
-
-      .brand-moment { height: 45vh; min-height: 280px; }
 
       .om-intro { grid-template-columns: 1fr; gap: 36px; }
       .grunnlegger { grid-template-columns: 1fr; gap: 28px; }
@@ -745,7 +719,7 @@
       .visjon-block { padding: 60px 20px; margin: 0 -20px 64px; }
 
       .events-grid { grid-template-columns: 1fr; }
-      .event-card { aspect-ratio: 4/3; }
+      .event-card { aspect-ratio: 3/2; }
 
       .kontakt-inner { grid-template-columns: 1fr; gap: 40px; }
 
@@ -1500,52 +1474,11 @@
     </div>
   </section>
 
-  <!-- ══════════════════════════════════════
-       TICKER STRIP
-  ══════════════════════════════════════ -->
-  <div class="ticker-strip" aria-hidden="true">
-    <div class="ticker-track">
-      <span class="ticker-item">Bevegelse</span>
-      <span class="ticker-sep">✦</span>
-      <span class="ticker-item">Kunnskap</span>
-      <span class="ticker-sep">✦</span>
-      <span class="ticker-item">Fellesskap</span>
-      <span class="ticker-sep">✦</span>
-      <span class="ticker-item">Helhetlig helse</span>
-      <span class="ticker-sep">✦</span>
-      <span class="ticker-item">Norsk natur</span>
-      <span class="ticker-sep">✦</span>
-      <span class="ticker-item">Retreat 2025</span>
-      <span class="ticker-sep">✦</span>
-      <span class="ticker-item">Workshop Bergen</span>
-      <span class="ticker-sep">✦</span>
-      <span class="ticker-item">Bevegelse</span>
-      <span class="ticker-sep">✦</span>
-      <span class="ticker-item">Kunnskap</span>
-      <span class="ticker-sep">✦</span>
-      <span class="ticker-item">Fellesskap</span>
-      <span class="ticker-sep">✦</span>
-      <span class="ticker-item">Helhetlig helse</span>
-      <span class="ticker-sep">✦</span>
-      <span class="ticker-item">Norsk natur</span>
-      <span class="ticker-sep">✦</span>
-      <span class="ticker-item">Retreat 2025</span>
-      <span class="ticker-sep">✦</span>
-      <span class="ticker-item">Workshop Bergen</span>
-      <span class="ticker-sep">✦</span>
-    </div>
-  </div>
 
   <!-- ══════════════════════════════════════
        OM AUST
   ══════════════════════════════════════ -->
   <section class="om-section" id="om">
-
-    <!-- Brand moment: full-width logo/brand image -->
-    <div class="brand-moment">
-      <img src="images/logo.png" alt="aust — bevegelse kunnskap fellesskap">
-      <div class="brand-moment-overlay"></div>
-    </div>
 
     <div class="om-inner">
 
