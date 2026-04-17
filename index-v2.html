@@ -148,12 +148,7 @@
       position: relative; z-index: 3; text-align: center;
       display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 0 24px;
     }
-    .hero-eyebrow {
-      font-family: var(--font-ui); font-weight: 400; font-size: 11px;
-      letter-spacing: 0.45em; text-transform: uppercase;
-      color: rgba(240,235,226,0.55);
-      opacity: 0; animation: fadeUp 1s ease 0.2s forwards;
-    }
+    .hero-eyebrow { display: none; }
     .hero-wordmark {
       font-family: var(--font-ui); font-weight: 900;
       font-size: clamp(88px, 18vw, 240px);
@@ -162,7 +157,12 @@
       opacity: 0; transform: translateY(20px);
       animation: fadeUp 1.4s cubic-bezier(0.25,0.46,0.45,0.94) 0.4s forwards;
     }
-    .hero-tagline { display: none; }
+    .hero-tagline {
+      font-family: var(--font-ui); font-weight: 400; font-size: 11px;
+      letter-spacing: 0.42em; text-transform: uppercase;
+      color: rgba(240,235,226,0.55); margin-top: 4px;
+      opacity: 0; animation: fadeUp 1s ease 1.0s forwards;
+    }
     .hero-scroll {
       position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
       z-index: 3; display: flex; flex-direction: column; align-items: center; gap: 8px;
