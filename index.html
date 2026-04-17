@@ -58,6 +58,7 @@
     .nav-logo {
       font-family: 'Plus Jakarta Sans', 'Outfit', var(--font-ui); font-weight: 800; font-size: 24px;
       letter-spacing: -0.02em; color: var(--bg); text-decoration: none;
+      -webkit-text-stroke: 0.025em var(--bg);
       transition: color 0.4s; position: relative; z-index: 102;
     }
     nav.scrolled .nav-logo,
@@ -158,6 +159,7 @@
       font-family: 'Plus Jakarta Sans', 'Outfit', var(--font-ui); font-weight: 800;
       font-size: clamp(88px, 18vw, 240px);
       letter-spacing: 0; color: var(--bg); line-height: 1;
+      -webkit-text-stroke: 0.025em var(--bg);
       opacity: 0; transform: translateY(20px);
       animation: fadeUp 1.4s cubic-bezier(0.25,0.46,0.45,0.94) 0.4s forwards;
     }
