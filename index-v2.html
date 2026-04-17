@@ -148,7 +148,12 @@
       position: relative; z-index: 3; text-align: center;
       display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 0 24px;
     }
-    .hero-eyebrow { display: none; }
+    .hero-eyebrow {
+      font-family: var(--font-ui); font-weight: 400; font-size: 11px;
+      letter-spacing: 0.45em; text-transform: uppercase;
+      color: rgba(240,235,226,0.55);
+      opacity: 0; animation: fadeUp 1s ease 0.2s forwards;
+    }
     .hero-wordmark {
       font-family: var(--font-ui); font-weight: 900;
       font-size: clamp(88px, 18vw, 240px);
